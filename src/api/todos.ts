@@ -1,4 +1,4 @@
-import type { MetaResponse, Todo, TodoRequest } from '../types/api';
+import type { MetaResponse, Todo } from '../types/api';
 import type { TodoStatusVariant } from '../types/api';
 
 import { baseApi } from './baseApi';

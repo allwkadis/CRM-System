@@ -28,7 +28,7 @@ function App() {
     <div className="wrapper">
       <div className="todo_wrapper">
         <TodoAddForm updateData={() => updateData(activeStatus)} />
-        <TodoStatusInfo todosInfo={data?.info} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus} />
+        <TodoStatusInfo todosInfo={data?.info!} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus} />
         <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
       </div>
     </div>
