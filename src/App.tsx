@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import type { TodoStatusVariant, MetaResponse, Todo } from './types/api';
+
+import { useEffect, useState } from 'react';
+
+import { getAllTodos } from './api/todos';
+import { TodoAddForm } from './components/TodoAddForm/TodoAddForm';
+import { TodoStatusInfo } from './components/TodoStatusInfo/TodoStatusInfo';
+import { TodoList } from './components/TodoList/TodoList';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
+  const [data, setData] = useState<MetaResponse<Todo>>();
+
+  const updateData = async (status: TodoStatusVariant) => {
+    const data = await getAllTodos(status);
+    await setData(data);
+  };
+
+  const changeStatusHandler = (status: TodoStatusVariant) => setActiveStatus(status);
+
+  useEffect(() => {
+    updateData(activeStatus);
+  }, [activeStatus]);
+
+  if (!data) return <div>loading...</div>;
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="wrapper">
+      <div className="todo_wrapper">
+        <TodoAddForm updateData={() => updateData(activeStatus)} />
+        <TodoStatusInfo todosInfo={data?.info!} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus} />
+        <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,14 @@
+:root {
+  --todo-width: 500px;
+  --todo-height: 700px;
+  --todo-background-color: rgb(231, 229, 229);
+  --font-color: black;
+  --font-color-danger: #e74c3c;
+
+  --button-primary-color: #2563eb;
+  --button-secondary-color: #2ecc71;
+  --button-danger-color: #e74c3c;
+  --button-outline-color: #34495e;
+
+  --todo-status-is-active-color: var(--button-primary-color);
+}
