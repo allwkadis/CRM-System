@@ -15,6 +15,8 @@ function App() {
     await setData(data);
   };
 
+  const changeStatusHandler = (status: TodoStatusVariant) => setActiveStatus(status)
+
   useEffect(() => {
     updateData(activeStatus);
   }, [activeStatus]);
@@ -25,7 +27,7 @@ function App() {
     <div className="wrapper">
       <div className="todo_wrapper">
         <TodoAddForm updateData={() => updateData(activeStatus)} />
-        <TodoStatusInfo todosInfo={data?.info} updateData={updateData} activeStatus={activeStatus}/>
+        <TodoStatusInfo todosInfo={data?.info} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus}/>
         {/* <TodoList /> */}
       </div>
     </div>

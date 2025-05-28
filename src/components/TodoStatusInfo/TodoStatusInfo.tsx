@@ -5,29 +5,31 @@ import styles from './TodoStatusInfo.module.scss';
 interface TodoStatusInfoProps {
   todosInfo: TodoInfo;
   activeStatus: TodoStatusVariant;
-  updateData: (status: TodoStatusVariant) => void;
+  changeStatusHandler: (status: TodoStatusVariant) => void;
 }
 
-export const TodoStatusInfo = ({ todosInfo, activeStatus, updateData }: TodoStatusInfoProps) => {
+//написать handler
+
+export const TodoStatusInfo = ({ todosInfo, activeStatus, changeStatusHandler }: TodoStatusInfoProps) => {
   const { all, inWork, completed } = todosInfo;
 
   return (
     <div className={styles.TodosInfo}>
       <div
         className={classNames(styles.TodosInfoItem, { [`${styles.isActive}`]: activeStatus === 'all' })}
-        onClick={() => updateData('all')}
+        onClick={() => changeStatusHandler('all')}
       >
         Все: ({all})
       </div>
       <div
         className={classNames(styles.TodosInfoItem, { [`${styles.isActive}`]: activeStatus === 'inWork' })}
-        onClick={() => updateData('inWork')}
+        onClick={() => changeStatusHandler('inWork')}
       >
         В работе: ({inWork})
       </div>
       <div
         className={classNames(styles.TodosInfoItem, { [`${styles.isActive}`]: activeStatus === 'completed' })}
-        onClick={() => updateData('completed')}
+        onClick={() => changeStatusHandler('completed')}
       >
         Выполненные: ({completed})
       </div>
