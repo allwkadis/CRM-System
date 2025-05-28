@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { getAllTodos } from './api/todos';
 import { TodoAddForm } from './components/TodoAddForm/TodoAddForm';
 import { TodoStatusInfo } from './components/TodoStatusInfo/TodoStatusInfo';
+import { TodoList } from './components/TodoList/TodoList';
 
 function App() {
   const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
@@ -15,7 +16,7 @@ function App() {
     await setData(data);
   };
 
-  const changeStatusHandler = (status: TodoStatusVariant) => setActiveStatus(status)
+  const changeStatusHandler = (status: TodoStatusVariant) => setActiveStatus(status);
 
   useEffect(() => {
     updateData(activeStatus);
@@ -27,8 +28,8 @@ function App() {
     <div className="wrapper">
       <div className="todo_wrapper">
         <TodoAddForm updateData={() => updateData(activeStatus)} />
-        <TodoStatusInfo todosInfo={data?.info} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus}/>
-        {/* <TodoList /> */}
+        <TodoStatusInfo todosInfo={data?.info} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus} />
+        <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
       </div>
     </div>
   );
