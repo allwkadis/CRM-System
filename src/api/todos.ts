@@ -1,10 +1,10 @@
 import type { MetaResponse, Todo, TodoRequest } from '../types/api';
-import type { filterVariant } from '../types/api';
+import type { TodoStatusVariant } from '../types/api';
 
 import { baseApi } from './baseApi';
 import { ROUTES } from '../constants/routes';
 
-export const getAllTodos = (filter: filterVariant) => baseApi<MetaResponse<Todo>>(`${ROUTES.TODOS}?filter=${filter}`);
+export const getAllTodos = (filter: TodoStatusVariant) => baseApi<MetaResponse<Todo>>(`${ROUTES.TODOS}?filter=${filter}`);
 
 export const getTodoById = (id: number) => baseApi<Todo>(`${ROUTES.TODOS}/${id}`);
 
