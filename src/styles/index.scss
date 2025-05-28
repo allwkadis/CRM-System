@@ -1,2 +1,8 @@
 @import url('./variables/global.scss');
 @import url('./reset.scss');
+
+body {
+  min-width: 100vh;
+  min-height: 100vh;
+  color: var(--font-color);
+}
