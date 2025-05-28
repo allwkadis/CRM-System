@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 
 import { getAllTodos } from './api/todos';
 import { TodoAddForm } from './components/TodoAddForm/TodoAddForm';
+import { TodoStatusInfo } from './components/TodoStatusInfo/TodoStatusInfo';
 
 function App() {
-  const [activeFilter, setActiveFilters] = useState<TodoStatusVariant>('all');
+  const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
   const [data, setData] = useState<MetaResponse<Todo>>();
 
   const updateData = async (status: TodoStatusVariant) => {
@@ -15,16 +16,16 @@ function App() {
   };
 
   useEffect(() => {
-    updateData(activeFilter);
-  }, [activeFilter]);
+    updateData(activeStatus);
+  }, [activeStatus]);
 
-  // const { data: todos, info: todoInfo } = data;
+  if (!data) return <div>loading...</div>;
 
   return (
     <div className="wrapper">
       <div className="todo_wrapper">
-        <TodoAddForm updateData={() => updateData(activeFilter)} />
-        {/* <TodoStatusView /> */}
+        <TodoAddForm updateData={() => updateData(activeStatus)} />
+        <TodoStatusInfo todosInfo={data?.info} updateData={updateData} activeStatus={activeStatus}/>
         {/* <TodoList /> */}
       </div>
     </div>

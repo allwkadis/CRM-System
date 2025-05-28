@@ -1,4 +1,4 @@
-export type TodoStatusVariant = 'all' | 'inWork' | 'done';
+export type TodoStatusVariant = 'all' | 'inWork' | 'completed';
 
 export interface TodoRequest {
   title?: string;

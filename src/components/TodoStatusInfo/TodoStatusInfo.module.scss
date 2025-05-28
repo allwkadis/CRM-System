@@ -1,0 +1,17 @@
+.isActive {
+  color: blue;
+}
+
+.TodosInfo {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.TodosInfoItem {
+  cursor: pointer;
+  padding: 12px;
+  color: red;
+}
