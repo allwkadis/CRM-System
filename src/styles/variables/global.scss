@@ -1,9 +1,12 @@
 :root {
-  --todo-max-width: 700px;
-
-  
+  --todo-width: 500px;
+  --todo-height: 700px;
+  --todo-background-color: rgb(231, 229, 229);
   --font-color: black;
-  --primary-color: blue;
-  --secondary-color: rgb(25, 25, 210);
-  --error-color: red;
+  --font-color-danger: #e74c3c;
+
+  --button-primary-color: #3498db;
+  --button-secondary-color: #2ecc71;
+  --button-danger-color: #e74c3c;
+  --button-outline-color: #34495e;
 }

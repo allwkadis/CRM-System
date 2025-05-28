@@ -4,14 +4,15 @@ import type { TodoStatusVariant } from '../types/api';
 import { baseApi } from './baseApi';
 import { ROUTES } from '../constants/routes';
 
-export const getAllTodos = (filter: TodoStatusVariant) => baseApi<MetaResponse<Todo>>(`${ROUTES.TODOS}?filter=${filter}`);
+export const getAllTodos = (filter: TodoStatusVariant) =>
+  baseApi<MetaResponse<Todo>>(`${ROUTES.TODOS}?filter=${filter}`);
 
 export const getTodoById = (id: number) => baseApi<Todo>(`${ROUTES.TODOS}/${id}`);
 
-export const createTodo = (userData: TodoRequest) =>
+export const createTodo = (title: string) =>
   baseApi<Todo>(ROUTES.TODOS, {
     method: 'POST',
-    body: JSON.stringify(userData),
+    body: JSON.stringify({ title, isDone: false }),
   });
 
 export const updateTodo = (id: number, title: string, isDone: boolean) =>

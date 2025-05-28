@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
 import type { TodoStatusVariant, MetaResponse, Todo } from './types/api';
+
+import { useEffect, useState } from 'react';
+
 import { getAllTodos } from './api/todos';
+import { TodoAddForm } from './components/TodoAddForm/TodoAddForm';
 
 function App() {
   const [activeFilter, setActiveFilters] = useState<TodoStatusVariant>('all');
@@ -20,7 +23,7 @@ function App() {
   return (
     <div className="wrapper">
       <div className="todo_wrapper">
-        {/* <TodoAddForm /> */}
+        <TodoAddForm updateData={() => updateData(activeFilter)} />
         {/* <TodoStatusView /> */}
         {/* <TodoList /> */}
       </div>
