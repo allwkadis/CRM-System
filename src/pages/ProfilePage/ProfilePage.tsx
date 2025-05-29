@@ -1,12 +1,13 @@
+import Input from 'antd/es/input/Input';
 import styles from './ProfilePage.module.scss';
-import { Typography } from 'antd';
+import { Typography, Button } from 'antd';
 
 export const ProfilePage = () => {
   const { Text } = Typography;
 
   return (
     <div>
-      <Text type="success">aboba</Text>
+      <Button shape="circle">aboba</Button>
     </div>
   );
 };
