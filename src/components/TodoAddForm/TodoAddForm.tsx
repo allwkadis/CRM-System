@@ -20,6 +20,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
     if (!validateData) {
       setError(undefined);
       await createTodo(inputValue);
+      await setInputValue('');
       await updateData();
     }
 
@@ -32,8 +33,15 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   return (
     <div className={styles.TodoAddForm_wrapper}>
       <form onSubmit={editSubmitHandler} className={styles.TodoAddForm}>
-        <input placeholder="Task be done..." onChange={changeInputValueHandler} className={styles.CreateInput} />
-        <Button variant="primary">📝 Add</Button>
+        <input
+          placeholder="Task be done..."
+          onChange={changeInputValueHandler}
+          className={styles.CreateInput}
+          value={inputValue}
+        />
+        <Button variant="primary" type="submit">
+          📝 Add
+        </Button>
       </form>
       {error && <div className={styles.Error}>{error}</div>}
     </div>
