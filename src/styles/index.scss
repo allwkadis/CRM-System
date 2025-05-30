@@ -2,19 +2,13 @@
 @import url('./reset.scss');
 @import url('antd/dist/reset.css');
 
-body {
-  min-width: 100vh;
-  min-height: 100vh;
-  color: var(--font-color);
-}
-
-.wrapper {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+// .wrapper {
+//   width: 100%;
+//   min-height: 100vh;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// }
 
 .todo_wrapper {
   max-width: var(--todo-width);

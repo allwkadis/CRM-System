@@ -6,6 +6,7 @@ import { TodoStatusInfo } from '../../components/TodoStatusInfo/TodoStatusInfo';
 import { TodoList } from '../../components/TodoList/TodoList';
 
 import styles from './TodoPage.module.scss';
+import { Flex } from 'antd';
 
 export const TodoPage = () => {
   const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
@@ -25,12 +26,18 @@ export const TodoPage = () => {
   if (!data) return <div>loading...</div>;
 
   return (
-    <div className="wrapper">
+    <Flex align="center" justify="center" style={{ height: '100%' }}>
       <div className="todo_wrapper">
-        <TodoAddForm updateData={() => updateData(activeStatus)} />
-        <TodoStatusInfo todosInfo={data?.info!} changeStatusHandler={changeStatusHandler} activeStatus={activeStatus} />
-        <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
+        <Flex vertical>
+          <TodoAddForm updateData={() => updateData(activeStatus)} />
+          <TodoStatusInfo
+            todosInfo={data?.info!}
+            changeStatusHandler={changeStatusHandler}
+            activeStatus={activeStatus}
+          />
+          <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
+        </Flex>
       </div>
-    </div>
+    </Flex>
   );
 };
