@@ -7,16 +7,26 @@ import { Link } from 'react-router';
 export const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  // { key: 'profile', label: <Link to={ROUTES.PROFILE}>Профиль</Link>, icon: '🗒️', title: 'Профиль' },
+
   const menuItems = [
-    { key: 'profile', label: <Link to={ROUTES.PROFILE}>Профиль</Link>, icon: '🗒️', title: 'Профиль' },
+    { key: 'profile', label: <Link to={ROUTES.PROFILE}>Профиль </Link>, icon: '🗒️', title: 'Профиль' },
     { key: 'todo', label: <Link to={ROUTES.TODO_PAGE}>Todo</Link>, icon: '📝', title: 'Todo' },
   ];
 
   const isCollapsedToggle = () => setIsCollapsed((prev) => !prev);
 
   return (
-    <Sider collapsed={isCollapsed} theme="dark" collapsible breakpoint="lg" width={300} onCollapse={isCollapsedToggle}>
-      <Menu items={menuItems} theme="dark" inlineCollapsed={!isCollapsed} />
+    <Sider
+      collapsed={isCollapsed}
+      theme="dark"
+      collapsible
+      breakpoint="lg"
+      width={300}
+      collapsedWidth={60}
+      onCollapse={isCollapsedToggle}
+    >
+      <Menu items={menuItems} theme="dark" mode="inline" inlineCollapsed={false} />
     </Sider>
   );
 };
