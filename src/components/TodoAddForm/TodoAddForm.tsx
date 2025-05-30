@@ -3,9 +3,10 @@ import { useState } from 'react';
 import { ERROR } from '../../constants/error';
 import { createTodo } from '../../api/todos';
 import { validate } from '../../utils/validate';
-import styles from './TodoAddForm.module.scss';
 import { Button } from '../Button/Button';
+import { Flex, Form, Input, Space } from 'antd';
 
+import styles from './TodoAddForm.module.scss';
 interface TodoAddFormProps {
   updateData: () => void;
 }
@@ -32,17 +33,14 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
 
   return (
     <div className={styles.TodoAddForm_wrapper}>
-      <form onSubmit={editSubmitHandler} className={styles.TodoAddForm}>
-        <input
-          placeholder="Task be done..."
-          onChange={changeInputValueHandler}
-          className={styles.CreateInput}
-          value={inputValue}
-        />
-        <Button variant="primary" type="submit">
-          📝 Add
-        </Button>
-      </form>
+      <Form onSubmitCapture={editSubmitHandler}>
+        <Flex gap={10}>
+          <Input placeholder="Task be done..." value={inputValue} onChange={changeInputValueHandler} />
+          <Button variant="primary" type="submit">
+            📝 Add
+          </Button>
+        </Flex>
+      </Form>
       {error && <div className={styles.Error}>{error}</div>}
     </div>
   );
