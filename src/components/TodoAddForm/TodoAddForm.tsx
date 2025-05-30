@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { ERROR } from '../../constants/error';
-import { createTodo, updateTodo } from '../../api/todos';
+import { createTodo } from '../../api/todos';
 import { validate } from '../../utils/validate';
 import styles from './TodoAddForm.module.scss';
 import { Button } from '../Button/Button';
