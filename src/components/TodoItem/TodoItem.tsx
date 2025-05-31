@@ -23,6 +23,11 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
     await updateData();
   };
 
+  const cancelIsEditingHandler = () => {
+    setIsEditing(false);
+    setEditText(text);
+  };
+
   const changeIsDoneHandler = async () => {
     await updateTodo(id, editText, !completed);
     await updateData();
@@ -83,7 +88,7 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
               Сохранить
             </button>
             <button
-              onClick={() => console.log(1)}
+              onClick={cancelIsEditingHandler}
               className={`${styles.actionButton} ${styles.editButton}`}
               disabled={completed}
             >
