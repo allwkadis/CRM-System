@@ -30,11 +30,7 @@ export const TodoPage = () => {
       <div className="todo_wrapper">
         <Flex vertical>
           <TodoAddForm updateData={() => updateData(activeStatus)} />
-          <TodoStatusInfo
-            todosInfo={data?.info!}
-            changeStatusHandler={changeStatusHandler}
-            activeStatus={activeStatus}
-          />
+          <TodoStatusInfo changeStatusHandler={changeStatusHandler} />
           <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
         </Flex>
       </div>

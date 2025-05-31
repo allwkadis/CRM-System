@@ -1,38 +1,25 @@
-import classNames from 'classnames';
-import type { TodoInfo, TodoStatusVariant } from '../../types/api';
-import styles from './TodoStatusInfo.module.scss';
+import type { TodoStatusVariant } from '../../types/api';
+
+import { Tabs } from 'antd';
 
 interface TodoStatusInfoProps {
-  todosInfo: TodoInfo;
-  activeStatus: TodoStatusVariant;
   changeStatusHandler: (status: TodoStatusVariant) => void;
 }
 
-//написать handler
+const TodoStatusInfoTabsItems = [
+  { label: 'Все', key: 'all' },
+  { label: 'В работе', key: 'inWork' },
+  { label: 'Выполненные', key: 'completed' },
+];
 
-export const TodoStatusInfo = ({ todosInfo, activeStatus, changeStatusHandler }: TodoStatusInfoProps) => {
-  const { all, inWork, completed } = todosInfo;
-
+export const TodoStatusInfo = ({ changeStatusHandler }: TodoStatusInfoProps) => {
   return (
-    <div className={styles.TodosInfo}>
-      <div
-        className={classNames(styles.TodosInfoItem, { [`${styles.isActive}`]: activeStatus === 'all' })}
-        onClick={() => changeStatusHandler('all')}
-      >
-        Все: ({all})
-      </div>
-      <div
-        className={classNames(styles.TodosInfoItem, { [`${styles.isActive}`]: activeStatus === 'inWork' })}
-        onClick={() => changeStatusHandler('inWork')}
-      >
-        В работе: ({inWork})
-      </div>
-      <div
-        className={classNames(styles.TodosInfoItem, { [`${styles.isActive}`]: activeStatus === 'completed' })}
-        onClick={() => changeStatusHandler('completed')}
-      >
-        Выполненные: ({completed})
-      </div>
-    </div>
+    <Tabs
+      centered
+      defaultActiveKey={'all'}
+      tabPosition="top"
+      items={TodoStatusInfoTabsItems}
+      onChange={(activeKey) => changeStatusHandler(activeKey as TodoStatusVariant)}
+    />
   );
 };
