@@ -4,9 +4,10 @@ import { ERROR } from '../../constants/error';
 import { createTodo } from '../../api/todos';
 import { validate } from '../../utils/validate';
 import { Button } from '../Button/Button';
-import { Flex, Form, Input, Space } from 'antd';
+import { Flex, Form, Input } from 'antd';
 
 import styles from './TodoAddForm.module.scss';
+
 interface TodoAddFormProps {
   updateData: () => void;
 }
@@ -34,7 +35,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   return (
     <div className={styles.TodoAddForm_wrapper}>
       <Form onSubmitCapture={editSubmitHandler}>
-        <Flex gap={10}>
+        <Flex gap="small">
           <Input placeholder="Task be done..." value={inputValue} onChange={changeInputValueHandler} />
           <Button variant="primary" type="submit">
             📝 Add

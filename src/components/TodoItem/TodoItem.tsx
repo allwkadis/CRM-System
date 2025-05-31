@@ -3,6 +3,7 @@ import styles from './TodoItem.module.scss';
 import type { ERROR } from '../../constants/error';
 import { deleteTodo, updateTodo } from '../../api/todos';
 import { validate } from '../../utils/validate';
+import { Button, Checkbox, Input, Form, Space, Typography, Flex } from 'antd';
 
 interface TodoItemProps {
   text: string;
@@ -10,6 +11,8 @@ interface TodoItemProps {
   id: number;
   updateData: () => void;
 }
+
+const { Text } = Typography;
 
 export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -28,6 +31,11 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
     await updateData();
   };
 
+  const cancelIsEditingHandler = () => {
+    setIsEditing(false);
+    setEditText(text);
+  };
+
   const editSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -43,73 +51,85 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
   };
 
   return (
-    <div className={`${styles.todoItem} ${completed ? styles.completed : ''}`}>
+    <div className={`${styles.todoItem}`}>
       <div className={styles.todoContent}>
         <input
           type="checkbox"
           checked={completed}
           onChange={changeIsDoneHandler}
           className={styles.todoCheckbox}
-          aria-label="Toggle task"
           disabled={isEditing}
         />
-
         {isEditing ? (
           <form onSubmit={editSubmitHandler} className={styles.editForm}>
-            <label>
-              <input
-                type="text"
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)}
-                className={styles.editInput}
-                autoFocus
-              />
-              <div className={styles.Error}>{error}</div>
-            </label>
+            <input
+              type="text"
+              value={editText}
+              onChange={(e) => setEditText(e.target.value)}
+              className={styles.editInput}
+              autoFocus
+            />
+            <div className={styles.Error}>{error}</div>
           </form>
         ) : (
-          <span className={styles.todoText}>{text}</span>
+          <Text delete={completed}>{text}</Text>
         )}
       </div>
-
-      <div className={styles.todoActions}>
+      <Flex gap="small">
         {isEditing ? (
-          <>
-            <button
-              className={`${styles.actionButton} ${styles.editButton}`}
-              disabled={completed}
-              onClick={editSubmitHandler}
-            >
+          <Flex gap="small">
+            <Button disabled={completed} size="small" variant="solid" color="green" onClick={editSubmitHandler}>
               Сохранить
-            </button>
-            <button
-              onClick={() => console.log(1)}
-              className={`${styles.actionButton} ${styles.editButton}`}
-              disabled={completed}
-            >
+            </Button>
+            <Button disabled={completed} size="small" color="danger" variant="solid" onClick={cancelIsEditingHandler}>
               Отменить
-            </button>
-          </>
+            </Button>
+          </Flex>
         ) : (
-          <button
-            onClick={isEditingToggle}
-            className={`${styles.actionButton} ${styles.editButton}`}
-            aria-label="Edit task"
-            disabled={completed}
-          >
-            ✏️
-          </button>
+          <Flex gap="small">
+            <Button onClick={isEditingToggle} disabled={completed} type="primary" size="small" icon={'✏️'} />
+
+            <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={'🗑️'} />
+          </Flex>
         )}
-        <div className={styles.todoActions}>
-          <button
-            onClick={deleteTodoHandler}
-            className={`${styles.actionButton} ${styles.deleteButton}`}
-            aria-label="Delete task"
-          >
-            🗑️
-          </button>
-        </div>
-      </div>
+      </Flex>
     </div>
   );
+  // <Flex justify="space-betwen" className={styles.todoItem}>
+  //   <Flex className={styles.todoContent}>
+  //     {isEditing ? (
+  //       <Space>
+  //         <Space>
+  //           <Checkbox className={styles.todoCheckbox} />
+  //           <Form>
+  //             <Input autoFocus />
+  //           </Form>
+  //         </Space>
+  //         <Space>
+  //           <Button disabled={completed} size="small" variant="solid" color="green" onClick={editSubmitHandler}>
+  //             Сохранить
+  //           </Button>
+  //           <Button disabled={completed} size="small" color="danger" variant="solid" onClick={cancelIsEditingHandler}>
+  //             Отменить
+  //           </Button>
+  //         </Space>
+  //       </Space>
+  //     ) : (
+  //       <Flex justify="space-between">
+  //         <Flex gap="small" align="top">
+  //           <Checkbox />
+  //           <Text>{text}</Text>
+  //         </Flex>
+  //         <Flex>
+  //           <Button onClick={isEditingToggle} disabled={completed} variant="solid" type="primary" size="small">
+  //             ✏️
+  //           </Button>
+  //           <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small">
+  //             🗑️
+  //           </Button>
+  //         </Flex>
+  //       </Flex>
+  //     )}
+  //   </Flex>
+  // </Flex>
 };
