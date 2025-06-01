@@ -1,18 +1,19 @@
-import type { TodoStatusVariant } from '../../types/api';
+import type { TodoInfo, TodoStatusVariant } from '../../types/api';
 
 import { Tabs } from 'antd';
 
 interface TodoStatusInfoProps {
+  taskCount: TodoInfo;
   changeStatusHandler: (status: TodoStatusVariant) => void;
 }
 
-const TodoStatusInfoTabsItems = [
-  { label: 'Все', key: 'all' },
-  { label: 'В работе', key: 'inWork' },
-  { label: 'Выполненные', key: 'completed' },
-];
+export const TodoStatusInfo = ({ taskCount, changeStatusHandler }: TodoStatusInfoProps) => {
+  const TodoStatusInfoTabsItems = [
+    { label: `Все ${taskCount.all}`, key: 'all' },
+    { label: `В работе ${taskCount.inWork}`, key: 'inWork' },
+    { label: `Выполненные ${taskCount.completed}`, key: 'completed' },
+  ];
 
-export const TodoStatusInfo = ({ changeStatusHandler }: TodoStatusInfoProps) => {
   return (
     <Tabs
       centered

@@ -88,7 +88,6 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
         ) : (
           <Flex gap="small">
             <Button onClick={isEditingToggle} disabled={completed} type="primary" size="small" icon={'✏️'} />
-
             <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={'🗑️'} />
           </Flex>
         )}

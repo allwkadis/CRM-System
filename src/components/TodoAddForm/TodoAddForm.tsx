@@ -26,9 +26,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
 
   const [form] = Form.useForm();
 
-  const editSubmitHandler = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await form.validateFields();
+  const editSubmitHandler = async () => {
     await createTodo(inputValue);
     await form.resetFields();
     await updateData();
@@ -37,7 +35,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   const changeInputValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
 
   return (
-    <Form layout="inline" onSubmitCapture={editSubmitHandler} form={form} style={{ padding: 12 }}>
+    <Form layout="inline" onFinish={editSubmitHandler} form={form} style={{ padding: 12 }}>
       <Flex gap="middle" style={{ width: '100%' }}>
         <Form.Item name="inputField" style={{ flex: 1 }} rules={addTodoInputRules}>
           <Input placeholder="Task be done..." value={inputValue} onChange={changeInputValueHandler} />
