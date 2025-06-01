@@ -16,7 +16,6 @@ export const TodoStatusInfo = ({ changeStatusHandler }: TodoStatusInfoProps) => 
   return (
     <Tabs
       centered
-      defaultActiveKey={'all'}
       tabPosition="top"
       items={TodoStatusInfoTabsItems}
       onChange={(activeKey) => changeStatusHandler(activeKey as TodoStatusVariant)}

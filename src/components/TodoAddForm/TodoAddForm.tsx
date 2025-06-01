@@ -2,47 +2,52 @@ import { useState } from 'react';
 
 import { ERROR } from '../../constants/error';
 import { createTodo } from '../../api/todos';
-import { validate } from '../../utils/validate';
-import { Button } from '../Button/Button';
-import { Flex, Form, Input } from 'antd';
 
-import styles from './TodoAddForm.module.scss';
+import { Flex, Form, Input, Button } from 'antd';
 
 interface TodoAddFormProps {
   updateData: () => void;
 }
 
+const addTodoInputRules = [
+  { required: true, message: 'Обязательное поле!' },
+  {
+    min: 2,
+    message: ERROR.MIN_LENGTH_2,
+  },
+  {
+    max: 64,
+    message: ERROR.MAX_LENGTH_56,
+  },
+];
+
 export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState<ERROR | undefined>(undefined);
+
+  const [form] = Form.useForm();
 
   const editSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
-    const validateData = validate(inputValue);
-    if (!validateData) {
-      setError(undefined);
-      await createTodo(inputValue);
-      await setInputValue('');
-      await updateData();
-    }
-
-    setInputValue('');
-    setError(validateData);
+    await form.validateFields();
+    await createTodo(inputValue);
+    await form.resetFields();
+    await updateData();
   };
 
   const changeInputValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
 
   return (
-    <div className={styles.TodoAddForm_wrapper}>
-      <Form onSubmitCapture={editSubmitHandler}>
-        <Flex gap="small">
+    <Form layout="inline" onSubmitCapture={editSubmitHandler} form={form} style={{ padding: 12 }}>
+      <Flex gap="middle" style={{ width: '100%' }}>
+        <Form.Item name="inputField" style={{ flex: 1 }} rules={addTodoInputRules}>
           <Input placeholder="Task be done..." value={inputValue} onChange={changeInputValueHandler} />
-          <Button variant="primary" type="submit">
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
             📝 Add
           </Button>
-        </Flex>
-      </Form>
-      {error && <div className={styles.Error}>{error}</div>}
-    </div>
+        </Form.Item>
+      </Flex>
+    </Form>
   );
 };
