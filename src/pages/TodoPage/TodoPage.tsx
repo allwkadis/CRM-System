@@ -1,12 +1,12 @@
+import type { MetaResponse, Todo, TodoInfo, TodoStatusVariant } from '../../types/api';
+
 import { useEffect, useState } from 'react';
-import type { MetaResponse, Todo, TodoStatusVariant } from '../../types/api';
+import { Flex, Spin } from 'antd';
+
 import { getAllTodos } from '../../api/todos';
 import { TodoAddForm } from '../../components/TodoAddForm/TodoAddForm';
 import { TodoStatusInfo } from '../../components/TodoStatusInfo/TodoStatusInfo';
 import { TodoList } from '../../components/TodoList/TodoList';
-
-import styles from './TodoPage.module.scss';
-import { Flex } from 'antd';
 
 export const TodoPage = () => {
   const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
@@ -23,14 +23,23 @@ export const TodoPage = () => {
     updateData(activeStatus);
   }, [activeStatus]);
 
-  if (!data) return <div>loading...</div>;
+  if (!data)
+    return (
+      <Flex align="center" justify="center" style={{ height: '100%' }}>
+        <div className="todo_wrapper">
+          <Flex align="center" justify="center" style={{ height: '100%' }}>
+            <Spin />
+          </Flex>
+        </div>
+      </Flex>
+    );
 
   return (
     <Flex align="center" justify="center" style={{ height: '100%' }}>
       <div className="todo_wrapper">
         <Flex vertical>
           <TodoAddForm updateData={() => updateData(activeStatus)} />
-          <TodoStatusInfo changeStatusHandler={changeStatusHandler} taskCount={data.info} />
+          <TodoStatusInfo changeStatusHandler={changeStatusHandler} taskCount={data.info as TodoInfo} />
           <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
         </Flex>
       </div>

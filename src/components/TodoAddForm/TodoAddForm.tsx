@@ -23,11 +23,13 @@ const addTodoInputRules = [
 
 export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   const [inputValue, setInputValue] = useState('');
-
+  const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
 
   const editSubmitHandler = async () => {
+    await setIsLoading(true);
     await createTodo(inputValue);
+    await setIsLoading(false);
     await form.resetFields();
     await updateData();
   };
@@ -41,7 +43,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
           <Input placeholder="Task be done..." value={inputValue} onChange={changeInputValueHandler} />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" disabled={isLoading}>
             📝 Add
           </Button>
         </Form.Item>

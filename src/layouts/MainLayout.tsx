@@ -1,16 +1,17 @@
 import { Layout } from 'antd';
 import { Outlet } from 'react-router';
 import { SideBar } from '../components/SideBar/SideBar';
-import { Content } from 'antd/es/layout/layout';
+
+import styles from './MainLayout.module.scss';
 
 export default function MainLayout() {
   return (
-    <Layout hasSider style={{ minHeight: '100vh' }}>
+    <Layout hasSider className={styles.Wrapper}>
       <SideBar />
       <Layout>
-        <Content>
+        <Layout.Content className={styles.Content}>
           <Outlet />
-        </Content>
+        </Layout.Content>
       </Layout>
     </Layout>
   );
