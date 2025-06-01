@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import styles from './TodoItem.module.scss';
 import type { ERROR } from '../../constants/error';
+
+import { useState } from 'react';
+
 import { deleteTodo, updateTodo } from '../../api/todos';
-import { validate } from '../../utils/validate';
-import { Button, Checkbox, Input, Form, Space, Typography, Flex } from 'antd';
+
+import { Button, Typography, Flex, Input, Space, Checkbox } from 'antd';
+
+import styles from './TodoItem.module.scss';
 
 interface TodoItemProps {
   text: string;
@@ -12,14 +15,12 @@ interface TodoItemProps {
   updateData: () => void;
 }
 
-const { Text } = Typography;
-
 export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(text);
-  const [error, setError] = useState<ERROR | undefined>(undefined);
 
   const isEditingToggle = () => setIsEditing((prev) => !prev);
+  const changeEditTextValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value);
 
   const deleteTodoHandler = async () => {
     await deleteTodo(id);
@@ -39,96 +40,44 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
   const editSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validateData = validate(editText);
-
-    if (!validateData) {
-      await updateTodo(id, editText, completed);
-      await updateData();
-      await isEditingToggle();
-    }
-
-    setError(validateData);
+    await updateTodo(id, editText, completed);
+    await updateData();
+    await isEditingToggle();
   };
 
+  //try card component
+
   return (
-    <div className={`${styles.todoItem}`}>
-      <div className={styles.todoContent}>
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={changeIsDoneHandler}
-          className={styles.todoCheckbox}
-          disabled={isEditing}
-        />
-        {isEditing ? (
-          <form onSubmit={editSubmitHandler} className={styles.editForm}>
-            <input
-              type="text"
-              value={editText}
-              onChange={(e) => setEditText(e.target.value)}
-              className={styles.editInput}
-              autoFocus
-            />
-            <div className={styles.Error}>{error}</div>
-          </form>
-        ) : (
-          <Text delete={completed}>{text}</Text>
-        )}
-      </div>
-      <Flex gap="small">
-        {isEditing ? (
-          <Flex gap="small">
+    <Flex align="start" justify="space-between" gap="middle" className={styles.todoItem}>
+      <Checkbox checked={completed} onChange={changeIsDoneHandler} />
+      {isEditing ? (
+        <>
+          <Input value={editText} onChange={changeEditTextValueHandler} autoFocus style={{ flex: 1 }} />
+          <Space>
             <Button disabled={completed} size="small" variant="solid" color="green" onClick={editSubmitHandler}>
               Сохранить
             </Button>
             <Button disabled={completed} size="small" color="danger" variant="solid" onClick={cancelIsEditingHandler}>
               Отменить
             </Button>
-          </Flex>
-        ) : (
-          <Flex gap="small">
+          </Space>
+        </>
+      ) : (
+        <>
+          <Typography.Text
+            delete={completed}
+            style={{
+              flex: 1,
+            }}
+          >
+            {text}
+          </Typography.Text>
+          <Space>
             <Button onClick={isEditingToggle} disabled={completed} type="primary" size="small" icon={'✏️'} />
             <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={'🗑️'} />
-          </Flex>
-        )}
-      </Flex>
-    </div>
+          </Space>
+        </>
+      )}
+    </Flex>
   );
-  // <Flex justify="space-betwen" className={styles.todoItem}>
-  //   <Flex className={styles.todoContent}>
-  //     {isEditing ? (
-  //       <Space>
-  //         <Space>
-  //           <Checkbox className={styles.todoCheckbox} />
-  //           <Form>
-  //             <Input autoFocus />
-  //           </Form>
-  //         </Space>
-  //         <Space>
-  //           <Button disabled={completed} size="small" variant="solid" color="green" onClick={editSubmitHandler}>
-  //             Сохранить
-  //           </Button>
-  //           <Button disabled={completed} size="small" color="danger" variant="solid" onClick={cancelIsEditingHandler}>
-  //             Отменить
-  //           </Button>
-  //         </Space>
-  //       </Space>
-  //     ) : (
-  //       <Flex justify="space-between">
-  //         <Flex gap="small" align="top">
-  //           <Checkbox />
-  //           <Text>{text}</Text>
-  //         </Flex>
-  //         <Flex>
-  //           <Button onClick={isEditingToggle} disabled={completed} variant="solid" type="primary" size="small">
-  //             ✏️
-  //           </Button>
-  //           <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small">
-  //             🗑️
-  //           </Button>
-  //         </Flex>
-  //       </Flex>
-  //     )}
-  //   </Flex>
-  // </Flex>
 };

@@ -25,7 +25,7 @@ export const TodoPage = () => {
 
   if (!data)
     return (
-      <Flex align="center" justify="center" style={{ height: '100%' }}>
+      <Flex align="center" justify="center">
         <div className="todo_wrapper">
           <Flex align="center" justify="center" style={{ height: '100%' }}>
             <Spin />

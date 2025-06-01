@@ -1,13 +1,9 @@
-import Input from 'antd/es/input/Input';
-import styles from './ProfilePage.module.scss';
-import { Typography, Button } from 'antd';
+import { Typography, Flex } from 'antd';
 
 export const ProfilePage = () => {
-  const { Text } = Typography;
-
   return (
-    <div>
-      <Button shape="circle">aboba</Button>
-    </div>
+    <Flex align="center" justify="center" style={{ height: '100%' }}>
+      <Typography.Text>Привет</Typography.Text>
+    </Flex>
   );
 };
