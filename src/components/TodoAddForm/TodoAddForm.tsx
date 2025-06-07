@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ERROR } from '../../constants/error';
 import { createTodo } from '../../api/todos';
 
-import { Flex, Form, Input, Button } from 'antd';
+import { Flex, Form, Input, Button, message } from 'antd';
 import { FileAddFilled } from '@ant-design/icons';
 
 interface TodoAddFormProps {
@@ -24,19 +24,52 @@ const addTodoInputRules = [
 
 export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
+  const onSuccessEditMessage = () => {
+    messageApi.success({
+      content: 'Задача успешно добавлена',
+      style: {
+        position: 'absolute',
+        right: 10,
+      },
+    });
+  };
+
+  const onErrorAddTodoMessage = () => {
+    messageApi.error({
+      content: 'Ошибка при добавлении задачи',
+      style: {
+        position: 'absolute',
+        right: 10,
+      },
+    });
+  };
+
   const onAddTaskFinishHandler = async () => {
-    const text = form.getFieldValue('inputField');
-    await setIsLoading(true);
-    await createTodo(text);
-    await setIsLoading(false);
-    await form.resetFields();
-    await updateData();
+    try {
+      const text = form.getFieldValue('inputField');
+      setIsLoading(true);
+      onSuccessEditMessage();
+      await createTodo(text);
+    } catch (err) {
+    } finally {
+      form.resetFields();
+      setIsLoading(false);
+      await updateData();
+    }
   };
 
   return (
-    <Form layout="inline" onFinish={onAddTaskFinishHandler} form={form} style={{ padding: 12 }}>
+    <Form
+      layout="inline"
+      onFinish={onAddTaskFinishHandler}
+      onFinishFailed={onErrorAddTodoMessage}
+      form={form}
+      style={{ padding: 12 }}
+    >
+      {contextHolder}
       <Flex gap="middle" style={{ width: '100%' }}>
         <Form.Item name="inputField" style={{ flex: 1 }} rules={addTodoInputRules}>
           <Input placeholder="Task be done..." />
