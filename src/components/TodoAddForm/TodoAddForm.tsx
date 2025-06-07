@@ -23,7 +23,7 @@ const addTodoInputRules = [
 ];
 
 export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [form] = Form.useForm();
 
   const onAddTaskFinishHandler = async () => {
@@ -42,7 +42,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
           <Input placeholder="Task be done..." />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={isLoading} icon={<FileAddFilled />}>
+          <Button type="primary" htmlType="submit" loading={isLoading} icon={<FileAddFilled />}>
             Add
           </Button>
         </Form.Item>

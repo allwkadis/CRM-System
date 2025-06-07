@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Typography, Flex, Input, Space, Checkbox, Form } from 'antd';
+import { Button, Typography, Flex, Input, Space, Checkbox, Form, message } from 'antd';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 
@@ -31,14 +31,30 @@ const EditTextRules = [
 export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = useForm();
 
   const onStartEditing = () => setIsEditing(true);
   const onStopEditing = () => setIsEditing(false);
 
-  const deleteTodoHandler = async () => {
-    await deleteTodo(id);
-    updateData();
+  const onSuccessEditMessage = () => {
+    messageApi.success({
+      content: 'Задача успешно изменена',
+      style: {
+        position: 'absolute',
+        right: 10,
+      },
+    });
+  };
+
+  const onErrorAddTodoMessage = () => {
+    messageApi.error({
+      content: 'Ошибка при измении задачи',
+      style: {
+        position: 'absolute',
+        right: 10,
+      },
+    });
   };
 
   const changeIsDoneHandler = async () => {
@@ -51,6 +67,18 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
     onStopEditing();
   };
 
+  const deleteTodoHandler = async () => {
+    try {
+      setIsLoading(true);
+      await deleteTodo(id);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+      updateData();
+    }
+  };
+
   const editSubmitHandler = async () => {
     try {
       setIsLoading(true);
@@ -60,6 +88,7 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
     } catch (error) {
       console.error(error);
     } finally {
+      onSuccessEditMessage();
       setIsLoading(false);
       updateData();
     }
@@ -67,10 +96,18 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
 
   return (
     <Flex align="start" gap="middle" className={styles.todoItem}>
+      {contextHolder}
       <Checkbox checked={completed} onChange={changeIsDoneHandler} disabled={isEditing} />
       {isEditing ? (
         <>
-          <Form layout="inline" name="editForm" form={form} onFinish={editSubmitHandler} style={{ width: '100%' }}>
+          <Form
+            layout="inline"
+            name="editForm"
+            form={form}
+            onFinish={editSubmitHandler}
+            onFinishFailed={onErrorAddTodoMessage}
+            style={{ width: '100%' }}
+          >
             <Flex gap={'middle'} style={{ width: '100%' }}>
               <Form.Item style={{ flex: 1 }} name="editInput" rules={EditTextRules}>
                 <Input autoFocus defaultValue={text} />

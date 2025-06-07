@@ -34,6 +34,8 @@ export const TodoPage = () => {
       </Flex>
     );
 
+  // поправить as
+
   return (
     <Flex align="center" justify="center" style={{ height: '100%' }}>
       <div className="todo_wrapper">

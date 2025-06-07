@@ -14,12 +14,14 @@ export const TodoStatusInfo = ({ taskCount, changeStatusHandler }: TodoStatusInf
     { label: `Выполненные ${taskCount.completed}`, key: 'completed' },
   ];
 
+  const onChangeActiveKey = (key: TodoStatusVariant) => changeStatusHandler(key);
+
   return (
     <Tabs
       centered
       tabPosition="top"
       items={TodoStatusInfoTabsItems}
-      onChange={(activeKey) => changeStatusHandler(activeKey as TodoStatusVariant)}
+      onChange={(activeKey) => onChangeActiveKey(activeKey as TodoStatusVariant)}
     />
   );
 };
