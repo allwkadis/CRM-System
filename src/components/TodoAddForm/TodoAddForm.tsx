@@ -4,6 +4,7 @@ import { ERROR } from '../../constants/error';
 import { createTodo } from '../../api/todos';
 
 import { Flex, Form, Input, Button } from 'antd';
+import { FileAddFilled } from '@ant-design/icons';
 
 interface TodoAddFormProps {
   updateData: () => void;
@@ -41,8 +42,8 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
           <Input placeholder="Task be done..." />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" disabled={isLoading}>
-            📝 Add
+          <Button type="primary" htmlType="submit" disabled={isLoading} icon={<FileAddFilled />}>
+            Add
           </Button>
         </Form.Item>
       </Flex>
