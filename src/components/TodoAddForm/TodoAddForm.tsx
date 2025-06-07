@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ERROR } from '../../constants/error';
+import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
 import { createTodo } from '../../api/todos';
 
 import { Flex, Form, Input, Button, message } from 'antd';
@@ -13,12 +13,12 @@ interface TodoAddFormProps {
 const addTodoInputRules = [
   { required: true, message: 'Обязательное поле!' },
   {
-    min: 2,
-    message: ERROR.MIN_LENGTH_2,
+    min: TODO_TITLE_MIN_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MIN_LENGTH}`,
   },
   {
-    max: 64,
-    message: ERROR.MAX_LENGTH_56,
+    max: TODO_TITLE_MAX_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MAX_LENGTH}`,
   },
 ];
 
@@ -51,13 +51,14 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
     try {
       const text = form.getFieldValue('inputField');
       setIsLoading(true);
-      onSuccessEditMessage();
       await createTodo(text);
+      onSuccessEditMessage();
     } catch (err) {
+      onErrorAddTodoMessage();
     } finally {
       form.resetFields();
       setIsLoading(false);
-      await updateData();
+      updateData();
     }
   };
 

@@ -1,12 +1,11 @@
 import { API_ROUTES } from '../constants/routes';
-import { ERROR } from '../constants/error';
 
 export async function baseApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
   try {
     const response = await fetch(`${API_ROUTES.BASE_URL}${endpoint}`, options);
 
     if (!response.ok) {
-      throw new Error(`${ERROR.NETWORK}`);
+      throw new Error('Ошибка сети');
     }
 
     if (response.status === 204) {
@@ -19,7 +18,7 @@ export async function baseApi<T>(endpoint: string, options?: RequestInit): Promi
 
     return response.text() as T;
   } catch (error) {
-    console.error(ERROR.NETWORK);
+    console.error('Ошибка сети');
     throw error;
   }
 }

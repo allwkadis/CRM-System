@@ -4,7 +4,7 @@ import { Button, Typography, Flex, Input, Space, Checkbox, Form, message } from 
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 
-import { ERROR } from '../../constants/error';
+import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
 import { deleteTodo, updateTodo } from '../../api/todos';
 
 import styles from './TodoItem.module.scss';
@@ -19,12 +19,12 @@ interface TodoItemProps {
 const EditTextRules = [
   { required: true, message: 'Обязательное поле!' },
   {
-    min: 2,
-    message: ERROR.MIN_LENGTH_2,
+    min: TODO_TITLE_MIN_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MIN_LENGTH}`,
   },
   {
-    max: 64,
-    message: ERROR.MAX_LENGTH_56,
+    max: TODO_TITLE_MAX_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MAX_LENGTH}`,
   },
 ];
 
@@ -34,8 +34,26 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = useForm();
 
-  const onStartEditing = () => setIsEditing(true);
-  const onStopEditing = () => setIsEditing(false);
+  const startEditingHandler = () => setIsEditing(true);
+
+  const closeEditingHandler = () => setIsEditing(false);
+
+  const cancelIsEditingHandler = () => {
+    form.setFieldValue('editInput', text);
+    closeEditingHandler();
+  };
+
+  // вынести toasts на вверх
+
+  const onErrorMessage = () => {
+    messageApi.success({
+      content: 'Произошла ошибка',
+      style: {
+        position: 'absolute',
+        right: 10,
+      },
+    });
+  };
 
   const onSuccessEditMessage = () => {
     messageApi.success({
@@ -59,12 +77,12 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
 
   const changeIsDoneHandler = async () => {
     await updateTodo(id, text, !completed);
-    updateData();
-  };
-
-  const cancelIsEditingHandler = () => {
-    form.setFieldValue('editInput', text);
-    onStopEditing();
+    try {
+    } catch (err) {
+      onErrorMessage();
+    } finally {
+      updateData();
+    }
   };
 
   const deleteTodoHandler = async () => {
@@ -72,7 +90,7 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
       setIsLoading(true);
       await deleteTodo(id);
     } catch (err) {
-      console.error(err);
+      onErrorMessage();
     } finally {
       setIsLoading(false);
       updateData();
@@ -84,11 +102,11 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
       setIsLoading(true);
       const editInputValue = form.getFieldValue('editInput');
       await updateTodo(id, editInputValue, completed);
+      onSuccessEditMessage();
       setIsEditing(false);
     } catch (error) {
-      console.error(error);
+      onErrorMessage();
     } finally {
-      onSuccessEditMessage();
       setIsLoading(false);
       updateData();
     }
@@ -151,7 +169,7 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
             {text}
           </Typography.Text>
           <Space>
-            <Button onClick={onStartEditing} disabled={completed} type="primary" size="small" icon={<EditFilled />} />
+            <Button onClick={startEditingHandler} disabled={completed} type="primary" size="small" icon={<EditFilled />} />
             <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={<DeleteFilled />} />
           </Space>
         </>
