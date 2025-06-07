@@ -1,10 +1,11 @@
-import type { ERROR } from '../../constants/error';
-
 import { useState } from 'react';
 
-import { deleteTodo, updateTodo } from '../../api/todos';
+import { Button, Typography, Flex, Input, Space, Checkbox, Form } from 'antd';
+import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import { useForm } from 'antd/es/form/Form';
 
-import { Button, Typography, Flex, Input, Space, Checkbox } from 'antd';
+import { ERROR } from '../../constants/error';
+import { deleteTodo, updateTodo } from '../../api/todos';
 
 import styles from './TodoItem.module.scss';
 
@@ -15,52 +16,92 @@ interface TodoItemProps {
   updateData: () => void;
 }
 
-export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(text);
+const EditTextRules = [
+  { required: true, message: 'Обязательное поле!' },
+  {
+    min: 2,
+    message: ERROR.MIN_LENGTH_2,
+  },
+  {
+    max: 64,
+    message: ERROR.MAX_LENGTH_56,
+  },
+];
 
-  const isEditingToggle = () => setIsEditing((prev) => !prev);
-  const changeEditTextValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => setEditText(e.target.value);
+export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [form] = useForm();
+
+  const onStartEditing = () => setIsEditing(true);
+  const onStopEditing = () => setIsEditing(false);
 
   const deleteTodoHandler = async () => {
     await deleteTodo(id);
-    await updateData();
+    updateData();
   };
 
   const changeIsDoneHandler = async () => {
-    await updateTodo(id, editText, !completed);
-    await updateData();
+    await updateTodo(id, text, !completed);
+    updateData();
   };
 
   const cancelIsEditingHandler = () => {
-    setIsEditing(false);
-    setEditText(text);
+    form.setFieldValue('editInput', text);
+    onStopEditing();
   };
 
-  const editSubmitHandler = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    await updateTodo(id, editText, completed);
-    await updateData();
-    await isEditingToggle();
+  const editSubmitHandler = async () => {
+    try {
+      setIsLoading(true);
+      const editInputValue = form.getFieldValue('editInput');
+      await updateTodo(id, editInputValue, completed);
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      updateData();
+    }
   };
-
-  //try card component
 
   return (
-    <Flex align="start" justify="space-between" gap="middle" className={styles.todoItem}>
-      <Checkbox checked={completed} onChange={changeIsDoneHandler} />
+    <Flex align="start" gap="middle" className={styles.todoItem}>
+      <Checkbox checked={completed} onChange={changeIsDoneHandler} disabled={isEditing} />
       {isEditing ? (
         <>
-          <Input value={editText} onChange={changeEditTextValueHandler} autoFocus style={{ flex: 1 }} />
-          <Space>
-            <Button disabled={completed} size="small" variant="solid" color="green" onClick={editSubmitHandler}>
-              Сохранить
-            </Button>
-            <Button disabled={completed} size="small" color="danger" variant="solid" onClick={cancelIsEditingHandler}>
-              Отменить
-            </Button>
-          </Space>
+          <Form layout="inline" name="editForm" form={form} onFinish={editSubmitHandler} style={{ width: '100%' }}>
+            <Flex gap={'middle'} style={{ width: '100%' }}>
+              <Form.Item style={{ flex: 1 }} name="editInput" rules={EditTextRules}>
+                <Input autoFocus defaultValue={text} />
+              </Form.Item>
+              <Space size={'middle'}>
+                <Form.Item name="editSaveButton">
+                  <Button
+                    disabled={completed}
+                    size="small"
+                    variant="solid"
+                    color="green"
+                    htmlType="submit"
+                    loading={isLoading}
+                  >
+                    Сохранить
+                  </Button>
+                </Form.Item>
+                <Form.Item name="editCancelButton">
+                  <Button
+                    disabled={completed}
+                    size="small"
+                    color="danger"
+                    variant="solid"
+                    onClick={cancelIsEditingHandler}
+                  >
+                    Отменить
+                  </Button>
+                </Form.Item>
+              </Space>
+            </Flex>
+          </Form>
         </>
       ) : (
         <>
@@ -73,8 +114,8 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
             {text}
           </Typography.Text>
           <Space>
-            <Button onClick={isEditingToggle} disabled={completed} type="primary" size="small" icon={'✏️'} />
-            <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={'🗑️'} />
+            <Button onClick={onStartEditing} disabled={completed} type="primary" size="small" icon={<EditFilled />} />
+            <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={<DeleteFilled />} />
           </Space>
         </>
       )}
