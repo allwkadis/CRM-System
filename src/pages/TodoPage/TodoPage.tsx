@@ -11,11 +11,12 @@ import { TODO_REFRESH_DELAY } from '../../constants/todo';
 
 export const TodoPage = () => {
   const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
-  const [data, setData] = useState<MetaResponse<Todo>>();
+  const [data, setData] = useState<MetaResponse<Todo> | null>(null);
 
   const updateData = async (status: TodoStatusVariant) => {
-    const data = await getAllTodos(status);
-    setData(data.data);
+    const response = await getAllTodos(status);
+    const data = response.data;
+    setData(data);
   };
 
   const changeStatusHandler = (status: TodoStatusVariant) => setActiveStatus(status);
@@ -27,26 +28,27 @@ export const TodoPage = () => {
     return () => clearInterval(refreshTodosInterval);
   }, [activeStatus]);
 
-  if (!data)
-    return (
-      <Flex align="center" justify="center">
+  {
+    return data ? (
+      <Flex align="center" justify="center" style={{ height: '100%' }}>
         <div className="todo_wrapper">
-          <Flex align="center" justify="center" style={{ height: '100%' }}>
-            <Spin />
+          <Flex vertical>
+            <TodoAddForm updateData={() => updateData(activeStatus)} />
+            <TodoStatusInfo changeStatusHandler={changeStatusHandler} taskCount={data.info as TodoInfo} />
+            <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
           </Flex>
         </div>
       </Flex>
-    );
-
-  return (
-    <Flex align="center" justify="center" style={{ height: '100%' }}>
-      <div className="todo_wrapper">
-        <Flex vertical>
-          <TodoAddForm updateData={() => updateData(activeStatus)} />
-          <TodoStatusInfo changeStatusHandler={changeStatusHandler} taskCount={data.info as TodoInfo} />
-          <TodoList updateData={() => updateData(activeStatus)} todos={data.data} />
+    ) : (
+      <>
+        <Flex align="center" justify="center">
+          <div className="todo_wrapper">
+            <Flex align="center" justify="center" style={{ height: '100%' }}>
+              <Spin />
+            </Flex>
+          </div>
         </Flex>
-      </div>
-    </Flex>
-  );
+      </>
+    );
+  }
 };
