@@ -1,6 +1,6 @@
 import type { MetaResponse, Todo, TodoInfo, TodoStatusVariant } from '../../types/api';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Flex, Spin } from 'antd';
 
 import { getAllTodos } from '../../api/todos';
@@ -13,13 +13,13 @@ export const TodoPage = () => {
   const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');
   const [data, setData] = useState<MetaResponse<Todo> | null>(null);
 
-  const updateData = async (status: TodoStatusVariant) => {
+  const updateData = useCallback(async (status: TodoStatusVariant) => {
     const response = await getAllTodos(status);
     const data = response.data;
     setData(data);
-  };
+  }, []);
 
-  const changeStatusHandler = (status: TodoStatusVariant) => setActiveStatus(status);
+  const changeStatusHandler = useCallback((status: TodoStatusVariant) => setActiveStatus(status), []);
 
   useEffect(() => {
     let refreshTodosInterval = setInterval(() => updateData(activeStatus), TODO_REFRESH_DELAY);

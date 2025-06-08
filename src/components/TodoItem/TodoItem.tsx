@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Button, Typography, Flex, Input, Space, Checkbox, Form, App } from 'antd';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
@@ -27,7 +27,7 @@ const EditTextRules = [
   },
 ];
 
-export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
+export const TodoItem = memo(({ text, completed, id, updateData }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [form] = useForm();
@@ -178,4 +178,4 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
       )}
     </Flex>
   );
-};
+});
