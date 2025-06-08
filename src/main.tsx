@@ -1,11 +1,12 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
+import { App } from 'antd';
 
-import { ROUTES } from './constants/routes.ts';
-import { TodoPage } from './pages/TodoPage/TodoPage.tsx';
-import { ProfilePage } from './pages/ProfilePage/ProfilePage.tsx';
-import MainLayout from './layouts/MainLayout.tsx';
+import MainLayout from './layouts/MainLayout';
+import { ProfilePage } from './pages/ProfilePage/ProfilePage';
+import { ROUTES } from './constants/routes';
+import { TodoPage } from './pages/TodoPage/TodoPage';
 
 import './styles/index.scss';
 
@@ -32,7 +33,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {/* <App /> */}
-    <RouterProvider router={router} />
+    <App>
+      <RouterProvider router={router} />
+    </App>
   </StrictMode>,
 );

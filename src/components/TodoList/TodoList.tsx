@@ -15,14 +15,7 @@ export const TodoList = ({ updateData, todos }: TodoListProps) => {
       renderItem={(todo) => {
         return (
           <List.Item>
-            <TodoItem
-              id={todo.id}
-              text={todo.title}
-              completed={todo.isDone}
-              updateData={updateData}
-              key={todo.id}
-              
-            />
+            <TodoItem id={todo.id} text={todo.title} completed={todo.isDone} updateData={updateData} key={todo.id} />
           </List.Item>
         );
       }}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Button, Typography, Flex, Input, Space, Checkbox, Form, message } from 'antd';
+import { Button, Typography, Flex, Input, Space, Checkbox, Form, App } from 'antd';
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 
@@ -17,7 +17,6 @@ interface TodoItemProps {
 }
 
 const EditTextRules = [
-  { required: true, message: 'Обязательное поле!' },
   {
     min: TODO_TITLE_MIN_LENGTH,
     message: `Текст задачи не может быть меньше ${TODO_TITLE_MIN_LENGTH}`,
@@ -31,8 +30,9 @@ const EditTextRules = [
 export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [messageApi, contextHolder] = message.useMessage();
   const [form] = useForm();
+
+  const { notification } = App.useApp();
 
   const startEditingHandler = () => setIsEditing(true);
 
@@ -43,35 +43,31 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
     closeEditingHandler();
   };
 
-  // вынести toasts на вверх
-
   const onErrorMessage = () => {
-    messageApi.success({
-      content: 'Произошла ошибка',
-      style: {
-        position: 'absolute',
-        right: 10,
-      },
-    });
-  };
-
-  const onSuccessEditMessage = () => {
-    messageApi.success({
-      content: 'Задача успешно изменена',
-      style: {
-        position: 'absolute',
-        right: 10,
-      },
+    notification.error({
+      message: 'Ошибка',
+      description: 'Произошла ошибка',
     });
   };
 
   const onErrorAddTodoMessage = () => {
-    messageApi.error({
-      content: 'Ошибка при измении задачи',
-      style: {
-        position: 'absolute',
-        right: 10,
-      },
+    notification.error({
+      message: 'Ошибка',
+      description: 'Произошла ошибка при редактировании задачи',
+    });
+  };
+
+  const onSuccessEditMessage = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Задача успешно изменена',
+    });
+  };
+
+  const onSuccessDeleteTodo = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Задача успешно удалена',
     });
   };
 
@@ -89,6 +85,7 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
     try {
       setIsLoading(true);
       await deleteTodo(id);
+      onSuccessDeleteTodo();
     } catch (err) {
       onErrorMessage();
     } finally {
@@ -114,7 +111,6 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
 
   return (
     <Flex align="start" gap="middle" className={styles.todoItem}>
-      {contextHolder}
       <Checkbox checked={completed} onChange={changeIsDoneHandler} disabled={isEditing} />
       {isEditing ? (
         <>
@@ -169,7 +165,13 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
             {text}
           </Typography.Text>
           <Space>
-            <Button onClick={startEditingHandler} disabled={completed} type="primary" size="small" icon={<EditFilled />} />
+            <Button
+              onClick={startEditingHandler}
+              disabled={completed}
+              type="primary"
+              size="small"
+              icon={<EditFilled />}
+            />
             <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={<DeleteFilled />} />
           </Space>
         </>

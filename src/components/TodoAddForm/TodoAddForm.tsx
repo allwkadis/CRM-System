@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
 import { createTodo } from '../../api/todos';
 
-import { Flex, Form, Input, Button, message } from 'antd';
+import { Flex, Form, Input, Button, App } from 'antd';
 import { FileAddFilled } from '@ant-design/icons';
 
 interface TodoAddFormProps {
@@ -24,26 +24,21 @@ const addTodoInputRules = [
 
 export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
 
-  const onSuccessEditMessage = () => {
-    messageApi.success({
-      content: 'Задача успешно добавлена',
-      style: {
-        position: 'absolute',
-        right: 10,
-      },
+  const { notification } = App.useApp();
+
+  const onSuccessAddTodo = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Задача успешно добавлена',
     });
   };
 
   const onErrorAddTodoMessage = () => {
-    messageApi.error({
-      content: 'Ошибка при добавлении задачи',
-      style: {
-        position: 'absolute',
-        right: 10,
-      },
+    notification.error({
+      message: 'Ошибка',
+      description: 'При добавлении задачи произошла ошибка',
     });
   };
 
@@ -52,7 +47,7 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
       const text = form.getFieldValue('inputField');
       setIsLoading(true);
       await createTodo(text);
-      onSuccessEditMessage();
+      onSuccessAddTodo();
     } catch (err) {
       onErrorAddTodoMessage();
     } finally {
@@ -70,7 +65,6 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
       form={form}
       style={{ padding: 12 }}
     >
-      {contextHolder}
       <Flex gap="middle" style={{ width: '100%' }}>
         <Form.Item name="inputField" style={{ flex: 1 }} rules={addTodoInputRules}>
           <Input placeholder="Task be done..." />
