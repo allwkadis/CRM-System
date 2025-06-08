@@ -1,27 +1,18 @@
-import type { MetaResponse, Todo } from '../types/api';
 import type { TodoStatusVariant } from '../types/api';
 
-import { baseApi } from './baseApi';
+import { baseApiAxios } from './baseApi';
 import { API_ROUTES } from '../constants/routes';
 
 export const getAllTodos = (filter: TodoStatusVariant) =>
-  baseApi<MetaResponse<Todo>>(`${API_ROUTES.TODOS}?filter=${filter}`);
-
-export const getTodoById = (id: number) => baseApi<Todo>(`${API_ROUTES.TODOS}/${id}`);
-
-export const createTodo = (title: string) =>
-  baseApi<Todo>(API_ROUTES.TODOS, {
-    method: 'POST',
-    body: JSON.stringify({ title, isDone: false }),
+  baseApiAxios.get('todos', {
+    params: { filter },
   });
+
+export const createTodo = (title: string) => baseApiAxios.post(API_ROUTES.TODOS, { title, isDone: false });
+
+export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`);
 
 export const updateTodo = (id: number, title: string, isDone: boolean) =>
-  baseApi<Todo>(`${API_ROUTES.TODOS}/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ title: title, isDone: isDone }),
-  });
+  baseApiAxios.put(`${API_ROUTES.TODOS}/${id}`, { title, isDone });
 
-export const deleteTodo = (id: number) =>
-  baseApi<string>(`${API_ROUTES.TODOS}/${id}`, {
-    method: 'DELETE',
-  });
+export const deleteTodo = (id: number) => baseApiAxios.delete(`${API_ROUTES.TODOS}/${id}`);
