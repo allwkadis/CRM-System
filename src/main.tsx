@@ -35,23 +35,23 @@ const router = createBrowserRouter([
         path: ROUTES.PROFILE,
         element: <ProfilePage />,
       },
+    ],
+  },
+  {
+    path: ROUTES.AUTH,
+    element: <AuthLayout />,
+    children: [
       {
-        path: ROUTES.AUTH,
-        element: <AuthLayout />,
-        children: [
-          {
-            index: true,
-            element: <Navigate to={ROUTES.LOGIN} replace />,
-          },
-          {
-            path: ROUTES.LOGIN,
-            element: <LoginForm />,
-          },
-          {
-            path: ROUTES.REGISTER,
-            element: <RegisterForm />,
-          },
-        ],
+        index: true,
+        element: <Navigate to={ROUTES.LOGIN} replace />,
+      },
+      {
+        path: ROUTES.LOGIN,
+        element: <LoginForm />,
+      },
+      {
+        path: ROUTES.REGISTER,
+        element: <RegisterForm />,
       },
     ],
   },
