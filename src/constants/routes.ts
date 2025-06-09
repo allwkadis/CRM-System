@@ -5,6 +5,9 @@ export enum API_ROUTES {
 
 export enum ROUTES {
   BASE_URL = '/',
-  TODO_PAGE = '/todo',
-  PROFILE = '/profile',
+  TODO_PAGE = 'todo',
+  PROFILE = 'profile',
+  AUTH = 'auth',
+  LOGIN = 'login',
+  REGISTER = 'register',
 }
