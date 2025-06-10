@@ -2,11 +2,11 @@ export enum API_ROUTES {
   BASE_URL = 'https://easydev.club/api/v1',
   TODOS = '/todos',
   AUTH_REGISTER = '/auth/signup',
-  AUTH_LOGIN = '',
+  AUTH_LOGIN = '/auth/signin',
   AUTH_REFRESH = '',
   AUTH_LOGOUT = '',
   USER_PROFILE = '',
-  USER_RESET_PASSWORD = ''
+  USER_RESET_PASSWORD = '',
 }
 
 export enum ROUTES {

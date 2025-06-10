@@ -1,4 +1,7 @@
 import { App, Button, Form, Input } from 'antd';
+import { userRegister } from '../../../api/auth';
+import { useNavigate } from 'react-router';
+
 import {
   REGISTER_LOGIN_MAX_LENGTH,
   REGISTER_LOGIN_MIN_LENGTH,
@@ -7,9 +10,6 @@ import {
   REGISTER_USERNAME_MAX_LENGTH,
   REGISTER_USERNAME_MIN_LENGTH,
 } from '../../../constants/auth';
-
-import { userRegister } from '../../../api/auth';
-import { useNavigate } from 'react-router';
 
 export const RegisterForm = () => {
   const [form] = Form.useForm();
@@ -49,8 +49,9 @@ export const RegisterForm = () => {
       form.resetFields();
       onSuccesRegisterNotification();
       navigate('/auth/login');
-    } catch {
-      onErrorRegisterNotification;
+    } catch (err) {
+      console.log(err);
+      onErrorRegisterNotification();
       return;
     }
   };

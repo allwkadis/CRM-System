@@ -1,24 +1,57 @@
-import { Button, Checkbox, Flex, Form, Input } from 'antd';
-import { Link } from 'react-router';
-import { ROUTES } from '../../../constants/routes';
+import { App, Button, Checkbox, Flex, Form, Input } from 'antd';
+import { Link, useNavigate } from 'react-router';
+import { userLogin } from '../../../api/auth';
 
 export const LoginForm = () => {
   const [form] = Form.useForm();
+  const { notification } = App.useApp();
+  const navigate = useNavigate();
+
+  const onSuccesRegisterNotification = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Успешный вход',
+    });
+  };
+
+  const onErrorRegisterNotification = () => {
+    notification.error({
+      message: 'Ошибка',
+      description: 'При входе произошла ошибка',
+    });
+  };
+
+  const onSuccessLoginFinish = async () => {
+    const login = form.getFieldValue('login-loginName-input');
+    const password = form.getFieldValue('login-password-input');
+
+    try {
+      await userLogin({ login, password });
+      form.resetFields();
+      onSuccesRegisterNotification();
+      navigate('/');
+    } catch (err) {
+      onErrorRegisterNotification();
+    }
+  };
+
+  const onErrorLoginFinish = () => onErrorRegisterNotification();
 
   return (
-    <Form name="login-form" layout="vertical" style={{ width: '100%', maxWidth: 376, padding: 12 }}>
+    <Form
+      form={form}
+      name="login-form"
+      layout="vertical"
+      style={{ width: '100%', maxWidth: 376, padding: 12 }}
+      onFinish={onSuccessLoginFinish}
+      onFinishFailed={onErrorLoginFinish}
+    >
       <Form.Item
-        label="Почта"
-        name="login-email-input"
-        rules={[
-          { required: true, message: 'Почтовый адрес обязательное поле!' },
-          {
-            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: 'Некорректный формат email! Пример: user@example.com',
-          },
-        ]}
+        label="Логин"
+        name="login-loginName-input"
+        rules={[{ required: true, message: 'Логин обязательное поле!' }]}
       >
-        <Input type="email" placeholder="Введите email" />
+        <Input placeholder="Введите логин" />
       </Form.Item>
       <Form.Item
         label="Пароль"
@@ -43,7 +76,7 @@ export const LoginForm = () => {
         </Form.Item>
       </Flex>
       <Form.Item name="login-submit-btn">
-        <Button style={{ width: '100%' }} type="primary">
+        <Button style={{ width: '100%' }} type="primary" htmlType="submit">
           Войти
         </Button>
       </Form.Item>
