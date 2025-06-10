@@ -7,17 +7,10 @@ export const LoginForm = () => {
   const { notification } = App.useApp();
   const navigate = useNavigate();
 
-  const onSuccesRegisterNotification = () => {
-    notification.success({
-      message: 'Успешно',
-      description: 'Успешный вход',
-    });
-  };
-
   const onErrorRegisterNotification = () => {
     notification.error({
       message: 'Ошибка',
-      description: 'При входе произошла ошибка',
+      description: 'Неверные логин или пароль',
     });
   };
 
@@ -26,9 +19,10 @@ export const LoginForm = () => {
     const password = form.getFieldValue('login-password-input');
 
     try {
-      await userLogin({ login, password });
+      const response = await userLogin({ login, password });
+      localStorage.setItem('accessToken', response.data.accessToken);
+      localStorage.setItem('refreshToken', response.data.refreshToken);
       form.resetFields();
-      onSuccesRegisterNotification();
       navigate('/');
     } catch (err) {
       onErrorRegisterNotification();
