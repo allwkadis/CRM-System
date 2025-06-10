@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd';
+import { App, Button, Form, Input } from 'antd';
 import {
   REGISTER_LOGIN_MAX_LENGTH,
   REGISTER_LOGIN_MIN_LENGTH,
@@ -8,13 +8,60 @@ import {
   REGISTER_USERNAME_MIN_LENGTH,
 } from '../../../constants/auth';
 
+import { userRegister } from '../../../api/auth';
+import { useNavigate } from 'react-router';
+
 export const RegisterForm = () => {
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const { notification } = App.useApp();
+
+  const onSuccesRegisterNotification = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Успешная регистрация',
+    });
+  };
+  const onErrorRegisterNotification = () => {
+    notification.error({
+      message: 'Ошибка',
+      description: 'При регистрации произошла ошибка',
+    });
+  };
+
+  const onRegisterErrorFinishHandler = () => onErrorRegisterNotification();
+
+  const onRegisterFinishHandler = async () => {
+    const username = form.getFieldValue('register-username-input');
+    const login = form.getFieldValue('register-login-input');
+    const password = form.getFieldValue('register-password-input');
+    const email = form.getFieldValue('register-email-input');
+    const phoneNumber = form.getFieldValue('register-phone-input');
+
+    try {
+      await userRegister({
+        email: email,
+        login: login,
+        password: password,
+        phoneNumber: phoneNumber,
+        username: username,
+      });
+      form.resetFields();
+      onSuccesRegisterNotification();
+      navigate('/auth/login');
+    } catch {
+      onErrorRegisterNotification;
+      return;
+    }
+  };
+
   return (
     <Form
       name="register-form"
       layout="vertical"
-      onFinish={() => console.log(1)}
-      onFinishFailed={() => console.log(2)}
+      onFinish={onRegisterFinishHandler}
+      onFinishFailed={onRegisterErrorFinishHandler}
+      form={form}
       style={{ width: '100%', maxWidth: 376, padding: 12 }}
     >
       <Form.Item
@@ -111,7 +158,6 @@ export const RegisterForm = () => {
         label="Телефон"
         name="register-phone-input"
         rules={[
-          { required: true, message: 'Телефон обязательное поле!' },
           { pattern: /^\+?[0-9\s\-\(\)]{10,}$/, message: 'Некорректный формат номера! Пример: +7 (123) 456-7890' },
         ]}
       >

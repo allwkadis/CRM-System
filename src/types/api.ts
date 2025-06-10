@@ -29,3 +29,16 @@ export interface MetaResponse<T> {
     totalAmount: number;
   };
 }
+
+export interface RegisterUserData {
+  email: 'string';
+  login: 'string';
+  password: 'string';
+  phoneNumber?: 'string';
+  username: 'string';
+}
+
+export interface LoginUserData {
+  login: 'string';
+  password: 'string';
+}

@@ -7,18 +7,39 @@ export const LoginForm = () => {
 
   return (
     <Form name="login-form" layout="vertical" style={{ width: '100%', maxWidth: 376, padding: 12 }}>
-      <Form.Item label="Email" name="login-email-input">
+      <Form.Item
+        label="Почта"
+        name="login-email-input"
+        rules={[
+          { required: true, message: 'Почтовый адрес обязательное поле!' },
+          {
+            pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: 'Некорректный формат email! Пример: user@example.com',
+          },
+        ]}
+      >
         <Input type="email" placeholder="Введите email" />
       </Form.Item>
-      <Form.Item label="Password" name="login-password-input">
-        <Input type="password" placeholder="****************" />
+      <Form.Item
+        label="Пароль"
+        name="login-password-input"
+        rules={[
+          {
+            required: true,
+            message: 'Пароль обязательное поле!',
+          },
+        ]}
+      >
+        <Input.Password placeholder="****************" />
       </Form.Item>
       <Flex justify="space-between" align="center">
         <Form.Item>
           <Checkbox>Запомнить меня</Checkbox>
         </Form.Item>
         <Form.Item>
-          <Link to={'/reset_password'}>Забыли пароль?</Link>
+          <Link to={'/auth/reset_password'}>
+            <Button type="link">Забыли пароль?</Button>
+          </Link>
         </Form.Item>
       </Flex>
       <Form.Item name="login-submit-btn">
@@ -28,7 +49,7 @@ export const LoginForm = () => {
       </Form.Item>
       <Form.Item name="login-submit-btn">
         <Link to={'/auth/register'}>
-          <Button style={{ width: '100%' }} type="primary">
+          <Button style={{ width: '100%' }} type="link">
             Зарегистрироваться
           </Button>
         </Link>
