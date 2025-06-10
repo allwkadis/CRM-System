@@ -1,5 +1,5 @@
 import { App, Button, Form, Input } from 'antd';
-import { userRegister } from '../../../api/auth';
+
 import { useNavigate } from 'react-router';
 
 import {
@@ -10,6 +10,7 @@ import {
   REGISTER_USERNAME_MAX_LENGTH,
   REGISTER_USERNAME_MIN_LENGTH,
 } from '../../../constants/auth';
+import { authUserRegister } from '../../../api/auth';
 
 export const RegisterForm = () => {
   const [form] = Form.useForm();
@@ -39,7 +40,7 @@ export const RegisterForm = () => {
     const phoneNumber = form.getFieldValue('register-phone-input');
 
     try {
-      await userRegister({
+      await authUserRegister({
         email: email,
         login: login,
         password: password,
@@ -81,6 +82,14 @@ export const RegisterForm = () => {
             max: REGISTER_USERNAME_MAX_LENGTH,
             message: `Имя пользователя не может быть меньше ${REGISTER_USERNAME_MAX_LENGTH}`,
           },
+          ({ getFieldValue }) => ({
+            validator(_, value) {
+              if (!value || getFieldValue('register-login-input') !== value) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('Имя пользователя и логин должны быть разными'));
+            },
+          }),
         ]}
       >
         <Input placeholder="Введите имя пользователя" />

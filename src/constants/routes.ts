@@ -3,10 +3,10 @@ export enum API_ROUTES {
   TODOS = '/todos',
   AUTH_REGISTER = '/auth/signup',
   AUTH_LOGIN = '/auth/signin',
-  AUTH_REFRESH = '',
+  AUTH_REFRESH = 'auth/refresh',
   AUTH_LOGOUT = '',
-  USER_PROFILE = '',
-  USER_RESET_PASSWORD = '',
+  USER_PROFILE = '/user/profile',
+  AUTH_RESET_PASSWORD = '/user/profile/reset-password',
 }
 
 export enum ROUTES {

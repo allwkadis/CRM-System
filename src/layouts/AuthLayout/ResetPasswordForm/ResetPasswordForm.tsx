@@ -1,3 +1,7 @@
+import { Form } from 'antd';
+
 export const ResetPasswordForm = () => {
-  return <div>ResetPasswordForm</div>;
+
+  
+  return <Form></Form>;
 };

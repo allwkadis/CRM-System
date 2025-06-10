@@ -1,13 +1,13 @@
 import { App, Button, Checkbox, Flex, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router';
-import { userLogin } from '../../../api/auth';
+import { authUserLogin } from '../../../api/auth';
 
 export const LoginForm = () => {
   const [form] = Form.useForm();
   const { notification } = App.useApp();
   const navigate = useNavigate();
 
-  const onErrorRegisterNotification = () => {
+  const onErrorLoginNotification = () => {
     notification.error({
       message: 'Ошибка',
       description: 'Неверные логин или пароль',
@@ -19,17 +19,16 @@ export const LoginForm = () => {
     const password = form.getFieldValue('login-password-input');
 
     try {
-      const response = await userLogin({ login, password });
-      localStorage.setItem('accessToken', response.data.accessToken);
-      localStorage.setItem('refreshToken', response.data.refreshToken);
+      const { data } = await authUserLogin({ login, password });
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
       form.resetFields();
       navigate('/');
     } catch (err) {
-      onErrorRegisterNotification();
+      console.log(1);
+      onErrorLoginNotification();
     }
   };
-
-  const onErrorLoginFinish = () => onErrorRegisterNotification();
 
   return (
     <Form
@@ -38,7 +37,6 @@ export const LoginForm = () => {
       layout="vertical"
       style={{ width: '100%', maxWidth: 376, padding: 12 }}
       onFinish={onSuccessLoginFinish}
-      onFinishFailed={onErrorLoginFinish}
     >
       <Form.Item
         label="Логин"
