@@ -4,7 +4,7 @@ export enum API_ROUTES {
   AUTH_REGISTER = '/auth/signup',
   AUTH_LOGIN = '/auth/signin',
   AUTH_REFRESH = 'auth/refresh',
-  AUTH_LOGOUT = '',
+  AUTH_LOGOUT = 'user/logout',
   USER_PROFILE = '/user/profile',
   AUTH_RESET_PASSWORD = '/user/profile/reset-password',
 }

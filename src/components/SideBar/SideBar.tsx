@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import { Menu } from 'antd';
 import { Link } from 'react-router';
-import { SnippetsOutlined, UserOutlined } from '@ant-design/icons';
+import { SnippetsOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
 import Sider from 'antd/es/layout/Sider';
 import { ROUTES } from '../../constants/routes';
+import { authUserLogout } from '../../api/auth';
+
+const onLogoutHanddler = async () => {
+  await authUserLogout();
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+};
 
 export const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -12,6 +19,16 @@ export const SideBar = () => {
   const menuItems = [
     { key: 'profile', label: <Link to={ROUTES.PROFILE}>Профиль </Link>, icon: <UserOutlined />, title: 'Профиль' },
     { key: 'todo', label: <Link to={ROUTES.TODO_PAGE}>Todo</Link>, icon: <SnippetsOutlined />, title: 'Todo' },
+    {
+      key: 'logout',
+      label: (
+        <Link to={'/auth/login'} onClick={onLogoutHanddler}>
+          Выйти
+        </Link>
+      ),
+      icon: <LogoutOutlined />,
+      title: 'Выйти',
+    },
   ];
 
   const isCollapsedToggle = () => setIsCollapsed((prev) => !prev);
