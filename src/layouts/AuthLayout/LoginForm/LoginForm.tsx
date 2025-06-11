@@ -57,16 +57,6 @@ export const LoginForm = () => {
       >
         <Input.Password placeholder="****************" />
       </Form.Item>
-      <Flex justify="space-between" align="center">
-        <Form.Item>
-          <Checkbox>Запомнить меня</Checkbox>
-        </Form.Item>
-        <Form.Item>
-          <Link to={'/auth/reset_password'}>
-            <Button type="link">Забыли пароль?</Button>
-          </Link>
-        </Form.Item>
-      </Flex>
       <Form.Item name="login-submit-btn">
         <Button style={{ width: '100%' }} type="primary" htmlType="submit" loading={isLoading}>
           Войти

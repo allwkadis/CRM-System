@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SignIn } from './SignIn';
 
-interface AuthSlice {
+interface AuthSliceInitialValue {
   isAuth: boolean;
   isLoading: boolean;
 }
 
-const initialState: AuthSlice = {
+const initialState: AuthSliceInitialValue = {
   isAuth: false,
   isLoading: false,
 };
