@@ -1,16 +1,15 @@
-import type { TodoStatusVariant } from '../types/api';
-
-import { baseApiAxios } from './baseApi';
 import { API_ROUTES } from '../constants/routes';
+import type { TodoStatusVariant } from '../types/api';
+import { baseApiAxios } from './baseApi';
 
 export const getAllTodos = (filter: TodoStatusVariant) =>
-  baseApiAxios.get('todos', {
+  baseApiAxios.get(API_ROUTES.TODOS, {
     params: { filter },
   });
 
 export const createTodo = (title: string) => baseApiAxios.post(API_ROUTES.TODOS, { title, isDone: false });
 
-export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`);
+export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`, {});
 
 export const updateTodo = (id: number, title: string, isDone: boolean) =>
   baseApiAxios.put(`${API_ROUTES.TODOS}/${id}`, { title, isDone });
