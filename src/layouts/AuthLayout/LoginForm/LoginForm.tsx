@@ -1,16 +1,20 @@
 import { App, Button, Checkbox, Flex, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router';
-import { authUserLogin } from '../../../api/auth';
+import { SignIn } from '../../../config/store/slices/AuthSlice/SignIn';
+
+import { useAppDispatch, useAppSelector } from '../../../config/store/store';
 
 export const LoginForm = () => {
   const [form] = Form.useForm();
   const { notification } = App.useApp();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { isLoading } = useAppSelector((state) => state.auth);
 
   const onErrorLoginNotification = () => {
     notification.error({
       message: 'Ошибка',
-      description: 'Неверные логин или пароль',
+      description: 'Неверный логин или пароль',
     });
   };
 
@@ -19,13 +23,9 @@ export const LoginForm = () => {
     const password = form.getFieldValue('login-password-input');
 
     try {
-      const { data } = await authUserLogin({ login, password });
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
-      form.resetFields();
+      await dispatch(SignIn({ login, password })).unwrap();
       navigate('/');
-    } catch (err) {
-      console.log(1);
+    } catch {
       onErrorLoginNotification();
     }
   };
@@ -68,7 +68,7 @@ export const LoginForm = () => {
         </Form.Item>
       </Flex>
       <Form.Item name="login-submit-btn">
-        <Button style={{ width: '100%' }} type="primary" htmlType="submit">
+        <Button style={{ width: '100%' }} type="primary" htmlType="submit" loading={isLoading}>
           Войти
         </Button>
       </Form.Item>

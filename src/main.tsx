@@ -14,6 +14,8 @@ import { RegisterForm } from './layouts/AuthLayout/RegisterForm/RegisterForm';
 import { LoginForm } from './layouts/AuthLayout/LoginForm/LoginForm';
 import { NotFoundPage } from './pages/NotFoundPage/NotFoundPage';
 import { ResetPasswordForm } from './layouts/AuthLayout/ResetPasswordForm/ResetPasswordForm';
+import { Provider } from 'react-redux';
+import { store } from './config/store/store';
 
 const router = createBrowserRouter([
   {
@@ -56,16 +58,18 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.RESET_PASSWORD,
-        element: <ResetPasswordForm />
-      }
+        element: <ResetPasswordForm />,
+      },
     ],
   },
 ]);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App>
-      <RouterProvider router={router} />
-    </App>
+    <Provider store={store}>
+      <App>
+        <RouterProvider router={router} />
+      </App>
+    </Provider>
   </StrictMode>,
 );
