@@ -11,7 +11,7 @@ import {
   REGISTER_USERNAME_MIN_LENGTH,
 } from '../../../utils/constants/auth';
 import { useAppDispatch, useAppSelector } from '../../../config/store/store';
-import { SignUp } from '../../../config/store/slices/AuthSlice/SignUp';
+import { SignUp } from '../../../config/actions/authActions';
 
 export const RegisterForm = () => {
   const [form] = Form.useForm();

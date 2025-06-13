@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { API_ROUTES } from '../utils/constants/routes';
-import { useDispatch } from 'react-redux';
+import { tokenManager } from '../utils/TokenManager';
 
 export const baseApiAxios = axios.create({
   baseURL: API_ROUTES.BASE_URL,
@@ -10,8 +10,7 @@ export const baseApiAxios = axios.create({
 
 baseApiAxios.interceptors.request.use(
   (config) => {
-    const accesToken = localStorage.getItem('accessToken');
-
+    const accesToken = tokenManager.getAccessToken();
     if (accesToken) {
       config.headers.Authorization = `Bearer ${accesToken}`;
     }
@@ -27,29 +26,23 @@ baseApiAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const dispatch = useDispatch() 
-    
 
-    if (originalRequest.url === API_ROUTES.AUTH_LOGIN || originalRequest.url === API_ROUTES.AUTH_REGISTER) {
+    if (originalRequest.url === API_ROUTES.AUTH_LOGIN || API_ROUTES.AUTH_REGISTER) {
       return Promise.reject(error);
     }
     if (error.response?.status === 401 && !originalRequest._retry) {
-      const refreshToken = localStorage.getItem('refreshToken');
+      const refreshToken = tokenManager.getRefreshToken();
 
       try {
         const { data } = await baseApiAxios.post(API_ROUTES.AUTH_REFRESH, {
           refreshToken,
         });
-
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-
         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+        tokenManager.setAccessToken(data.accessToken);
+        tokenManager.setRefreshToken(data.refreshToken);
         return baseApiAxios(originalRequest);
       } catch (refreshError) {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        // dispatch()
+        tokenManager.removeTokens();
         window.location.href = '/auth/login';
       }
     }

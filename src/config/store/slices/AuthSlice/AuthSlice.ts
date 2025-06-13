@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SignIn } from './SignIn';
-import { SignUp } from './SignUp';
-import { Logout } from './Logout';
+import { Logout, SignIn, SignUp } from '../../../actions/authActions';
 
 interface AuthSliceInitialValue {
   isAuth: boolean;

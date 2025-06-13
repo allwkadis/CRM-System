@@ -6,7 +6,7 @@ import { SnippetsOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icon
 import Sider from 'antd/es/layout/Sider';
 import { ROUTES } from '../../utils/constants/routes';
 import { useAppDispatch } from '../../config/store/store';
-import { Logout } from '../../config/store/slices/AuthSlice/Logout';
+import { Logout } from '../../config/actions/authActions';
 
 export const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);

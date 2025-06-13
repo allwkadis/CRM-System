@@ -1,8 +1,8 @@
 import { App, Button, Checkbox, Flex, Form, Input } from 'antd';
 import { Link, useNavigate } from 'react-router';
-import { SignIn } from '../../../config/store/slices/AuthSlice/SignIn';
 
 import { useAppDispatch, useAppSelector } from '../../../config/store/store';
+import { SignIn } from '../../../config/actions/authActions';
 
 export const LoginForm = () => {
   const navigate = useNavigate();

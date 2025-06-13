@@ -1,15 +1,29 @@
 class TokenManager {
-  constructor() {
-    
+  private _refreshToken: string = '';
+  private _accessToken: string = '';
+
+  setAccessToken(token: string) {
+    this._accessToken = token;
   }
 
-  addAccesToken() {}
+  getAccessToken() {
+    return this._accessToken;
+  }
 
-  addRefreshToken() {}
+  setRefreshToken(token: string) {
+    this._refreshToken = token;
+    localStorage.setItem('refreshToken', this._refreshToken);
+  }
 
-  removeAccessToken() {}
+  getRefreshToken() {
+    return localStorage.getItem('refreshToken') || '';
+  }
 
-  removeRefreshToken() {}
-
-  removeAllTokens() {}
+  public removeTokens() {
+    this._accessToken = '';
+    this._refreshToken = '';
+    localStorage.removeItem('refreshToken');
+  }
 }
+
+export const tokenManager = new TokenManager();
