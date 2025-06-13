@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { SignIn } from './SignIn';
+import { SignUp } from './SignUp';
+import { Logout } from './Logout';
 
 interface AuthSliceInitialValue {
   isAuth: boolean;
@@ -26,8 +28,25 @@ export const authSlice = createSlice({
       builder.addCase(SignIn.rejected, (state) => {
         state.isLoading = false;
       });
+    builder.addCase(SignUp.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(SignUp.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(SignUp.rejected, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(Logout.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(Logout.fulfilled, (state) => {
+      state.isLoading = false;
+      state.isAuth = false;
+    });
   },
   selectors: {
     selectIsAuth: (state) => state.isAuth,
+    selectIsLoading: (state) => state.isLoading,
   },
 });

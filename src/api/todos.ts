@@ -1,7 +1,7 @@
 import type { TodoStatusVariant } from '../types/api';
 
 import { baseApiAxios } from './baseApi';
-import { API_ROUTES } from '../constants/routes';
+import { API_ROUTES } from '../utils/constants/routes';
 
 export const getAllTodos = (filter: TodoStatusVariant) =>
   baseApiAxios.get('todos', {

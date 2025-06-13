@@ -4,7 +4,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import { App } from 'antd';
 
 import { ProfilePage } from './pages/ProfilePage/ProfilePage';
-import { ROUTES } from './constants/routes';
+import { ROUTES } from './utils/constants/routes';
 import { TodoPage } from './pages/TodoPage/TodoPage';
 
 import './styles/index.scss';

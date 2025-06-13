@@ -7,7 +7,7 @@ import { getAllTodos } from '../../api/todos';
 import { TodoAddForm } from '../../components/TodoAddForm/TodoAddForm';
 import { TodoStatusInfo } from '../../components/TodoStatusInfo/TodoStatusInfo';
 import { TodoList } from '../../components/TodoList/TodoList';
-import { TODO_REFRESH_DELAY } from '../../constants/todo';
+import { TODO_REFRESH_DELAY } from '../../utils/constants/todo';
 
 export const TodoPage = () => {
   const [activeStatus, setActiveStatus] = useState<TodoStatusVariant>('all');

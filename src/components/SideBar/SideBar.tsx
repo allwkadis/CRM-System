@@ -4,17 +4,21 @@ import { Link, NavLink } from 'react-router';
 import { SnippetsOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
 import Sider from 'antd/es/layout/Sider';
-import { ROUTES } from '../../constants/routes';
-import { authUserLogout } from '../../api/auth';
-
-const onLogoutHanddler = async () => {
-  await authUserLogout();
-  localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
-};
+import { ROUTES } from '../../utils/constants/routes';
+import { useAppDispatch } from '../../config/store/store';
+import { Logout } from '../../config/store/slices/AuthSlice/Logout';
 
 export const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const dispatch = useAppDispatch();
+
+  const onLogoutHanddler = async () => {
+    try {
+      await dispatch(Logout());
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+    } catch {}
+  };
 
   const menuItems = [
     {

@@ -5,10 +5,12 @@ import { SignIn } from '../../../config/store/slices/AuthSlice/SignIn';
 import { useAppDispatch, useAppSelector } from '../../../config/store/store';
 
 export const LoginForm = () => {
-  const [form] = Form.useForm();
-  const { notification } = App.useApp();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  const [form] = Form.useForm();
+
+  const { notification } = App.useApp();
   const { isLoading } = useAppSelector((state) => state.auth);
 
   const onErrorLoginNotification = () => {

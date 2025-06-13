@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
+import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../utils/constants/todo';
 import { createTodo } from '../../api/todos';
 
 import { Flex, Form, Input, Button, App } from 'antd';

@@ -1,6 +1,6 @@
 import type { LoginUserData, RegisterUserData } from '../types/api';
 
-import { API_ROUTES } from '../constants/routes';
+import { API_ROUTES } from '../utils/constants/routes';
 import { baseApiAxios } from './baseApi';
 
 export const authUserRegister = async (userData: RegisterUserData) =>

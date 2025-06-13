@@ -4,7 +4,7 @@ import { Button, Typography, Flex, Input, Space, Checkbox, Form, App } from 'ant
 import { DeleteFilled, EditFilled } from '@ant-design/icons';
 import { useForm } from 'antd/es/form/Form';
 
-import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
+import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../utils/constants/todo';
 import { deleteTodo, updateTodo } from '../../api/todos';
 
 import styles from './TodoItem.module.scss';

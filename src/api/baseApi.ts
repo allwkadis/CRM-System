@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-import { API_ROUTES } from '../constants/routes';
+import { API_ROUTES } from '../utils/constants/routes';
+import { useDispatch } from 'react-redux';
 
 export const baseApiAxios = axios.create({
   baseURL: API_ROUTES.BASE_URL,
@@ -26,8 +27,8 @@ baseApiAxios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    console.log(originalRequest.url);
+    const dispatch = useDispatch() 
+    
 
     if (originalRequest.url === API_ROUTES.AUTH_LOGIN || originalRequest.url === API_ROUTES.AUTH_REGISTER) {
       return Promise.reject(error);
@@ -48,6 +49,7 @@ baseApiAxios.interceptors.response.use(
       } catch (refreshError) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        // dispatch()
         window.location.href = '/auth/login';
       }
     }

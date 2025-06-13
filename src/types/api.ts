@@ -38,9 +38,19 @@ export interface RegisterUserData {
   username: 'string';
 }
 
+export interface RegisterResponse {
+  date: string;
+  email: string;
+  id: number;
+  isAdmin: true;
+  isBlocked: true;
+  phoneNumber: string;
+  username: string;
+}
+
 export interface LoginUserData {
-  login: 'string';
-  password: 'string';
+  login: string;
+  password: string;
 }
 
 export interface LoginResponse {

@@ -9,14 +9,16 @@ import {
   REGISTER_PASSWORD_MIN_LENGTH,
   REGISTER_USERNAME_MAX_LENGTH,
   REGISTER_USERNAME_MIN_LENGTH,
-} from '../../../constants/auth';
-import { authUserRegister } from '../../../api/auth';
+} from '../../../utils/constants/auth';
+import { useAppDispatch, useAppSelector } from '../../../config/store/store';
+import { SignUp } from '../../../config/store/slices/AuthSlice/SignUp';
 
 export const RegisterForm = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { notification } = App.useApp();
-
+  const { isLoading } = useAppSelector((state) => state.auth);
   const onSuccesRegisterNotification = () => {
     notification.success({
       message: 'Успешно',
@@ -40,20 +42,21 @@ export const RegisterForm = () => {
     const phoneNumber = form.getFieldValue('register-phone-input');
 
     try {
-      await authUserRegister({
-        email: email,
-        login: login,
-        password: password,
-        phoneNumber: phoneNumber,
-        username: username,
-      });
+      await dispatch(
+        SignUp({
+          email: email,
+          login: login,
+          password: password,
+          phoneNumber: phoneNumber,
+          username: username,
+        }),
+      );
       form.resetFields();
       onSuccesRegisterNotification();
       navigate('/auth/login');
     } catch (err) {
       console.log(err);
       onErrorRegisterNotification();
-      return;
     }
   };
 
@@ -174,7 +177,7 @@ export const RegisterForm = () => {
         <Input placeholder="Введите номер телефона" type="tel" />
       </Form.Item>
       <Form.Item name="login-submit-btn">
-        <Button style={{ width: '100%' }} type="primary" htmlType="submit">
+        <Button style={{ width: '100%' }} type="primary" htmlType="submit" loading={isLoading}>
           Зарегистрироваться
         </Button>
       </Form.Item>
