@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react';
 import { tokenManager } from '../utils/TokenManager';
-import { useNavigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { baseApiAxios } from '../api/baseApi';
 
 import { userSlice } from '../store/slices/userSlice';
 
-export const ProtectedRoute = ({ children }) => {
+interface ProtectedRouteProps {
+  children?: React.ReactNode;
+}
+
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -31,7 +35,7 @@ export const ProtectedRoute = ({ children }) => {
       } catch (error) {
         dispatch(userSlice.actions.logout());
         tokenManager.removeTokens();
-        navigate('/auth/login', { replace: true });
+        navigate('/auth/login');
       } finally {
         setIsChecking(false);
       }
@@ -44,5 +48,5 @@ export const ProtectedRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
 
-  return isAuth ? children : navigate('/login', { replace: true });
+  return isAuth ? children : <Navigate to={'/auth/login'} replace />;
 };

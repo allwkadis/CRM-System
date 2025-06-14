@@ -11,13 +11,12 @@ import {
   REGISTER_USERNAME_MIN_LENGTH,
 } from '../../../utils/constants/auth';
 
-import { SignUp } from '../../../config/actions/authActions';
-import { useAppDispatch, useAppSelector } from '../../../store/store';
+import { useAppSelector } from '../../../store/store';
+import { authUserRegister } from '../../../api/auth';
 
 export const RegisterForm = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const { notification } = App.useApp();
   const { isLoading } = useAppSelector((state) => state.auth);
   const onSuccesRegisterNotification = () => {
@@ -52,6 +51,13 @@ export const RegisterForm = () => {
       //     username: username,
       //   }),
       // );
+      await authUserRegister({
+        email: email,
+        login: login,
+        password: password,
+        phoneNumber: phoneNumber,
+        username: username,
+      });
       form.resetFields();
       onSuccesRegisterNotification();
       navigate('/auth/login');

@@ -1,28 +1,13 @@
 import { useState } from 'react';
 import { Menu } from 'antd';
-import { Link, NavLink, useNavigate } from 'react-router';
-import { SnippetsOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
+import { NavLink } from 'react-router';
+import { SnippetsOutlined, UserOutlined } from '@ant-design/icons';
 
 import Sider from 'antd/es/layout/Sider';
 import { ROUTES } from '../../utils/constants/routes';
-import { userSlice } from '../../store/slices/userSlice';
-import { useAppDispatch } from '../../store/store';
-import { tokenManager } from '../../utils/TokenManager';
-import { authUserLogout } from '../../api/auth';
 
 export const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const onLogoutHanddler = async () => {
-    try {
-      await authUserLogout();
-      tokenManager.removeTokens();
-      dispatch(userSlice.actions.logout());
-      navigate('/auth/login');
-    } catch {}
-  };
 
   const menuItems = [
     {
@@ -32,16 +17,6 @@ export const SideBar = () => {
       title: 'Профиль',
     },
     { key: 'todo', label: <NavLink to={ROUTES.TODO_PAGE}>Todo</NavLink>, icon: <SnippetsOutlined />, title: 'Todo' },
-    {
-      key: 'logout',
-      label: (
-        <Link to={'/auth/login'} onClick={onLogoutHanddler}>
-          Выйти
-        </Link>
-      ),
-      icon: <LogoutOutlined />,
-      title: 'Выйти',
-    },
   ];
 
   const isCollapsedToggle = () => setIsCollapsed((prev) => !prev);
