@@ -1,5 +1,5 @@
 import { Typography, Flex } from 'antd';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getUserProfileData } from '../../api/user';
 import { useAppSelector } from '../../store/store';
 

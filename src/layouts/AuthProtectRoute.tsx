@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react';
 import { tokenManager } from '../utils/TokenManager';
-import { Outlet, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../store/store';
 import { baseApiAxios } from '../api/baseApi';
 
 import { userSlice } from '../store/slices/userSlice';
 
 export const ProtectedRoute = ({ children }) => {
-  const { isAuth } = useAppSelector((state) => state.auth);
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { isAuth } = useAppSelector((state) => state.auth);
   const refreshToken = localStorage.getItem('refreshToken');
 
   useEffect(() => {
     const checkAuth = async () => {
       if (isAuth) {
         setIsChecking(false);
-        return children;
+        return;
       }
 
       try {
@@ -32,6 +32,8 @@ export const ProtectedRoute = ({ children }) => {
         dispatch(userSlice.actions.logout());
         tokenManager.removeTokens();
         navigate('/auth/login', { replace: true });
+      } finally {
+        setIsChecking(false);
       }
     };
 

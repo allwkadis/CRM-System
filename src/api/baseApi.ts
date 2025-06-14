@@ -37,6 +37,7 @@ baseApiAxios.interceptors.request.use(
 //           refreshToken,
 //         });
 
+// <<<<<<< Updated upstream
 //         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
 //         tokenManager.setAccessToken(data.accessToken);
 //         tokenManager.setRefreshToken(data.refreshToken);
@@ -47,7 +48,10 @@ baseApiAxios.interceptors.request.use(
 //         // window.location.href = '/auth/login';
 //       }
 //     }
+// =======
+//     console.log(error);
+// >>>>>>> Stashed changes
 
-//     return Promise.reject(error);
+// //     return Promise.reject(error);
 //   },
 // );
