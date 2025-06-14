@@ -11,6 +11,7 @@ export const baseApiAxios = axios.create({
 baseApiAxios.interceptors.request.use(
   (config) => {
     const accesToken = tokenManager.getAccessToken();
+    console.log(accesToken);
     if (accesToken) {
       config.headers.Authorization = `Bearer ${accesToken}`;
     }
@@ -22,31 +23,31 @@ baseApiAxios.interceptors.request.use(
   },
 );
 
-baseApiAxios.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+// baseApiAxios.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     const originalRequest = error.config;
+//     const refreshToken = tokenManager.getRefreshToken();
+//     if (originalRequest.url === API_ROUTES.AUTH_LOGIN || originalRequest.url === API_ROUTES.AUTH_REGISTER) {
+//       return Promise.reject(error);
+//     }
+//     if (error.response?.status === 401 && !originalRequest._retry) {
+//       try {
+//         const { data } = await baseApiAxios.post(API_ROUTES.AUTH_REFRESH, {
+//           refreshToken,
+//         });
 
-    if (originalRequest.url === API_ROUTES.AUTH_LOGIN || API_ROUTES.AUTH_REGISTER) {
-      return Promise.reject(error);
-    }
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      const refreshToken = tokenManager.getRefreshToken();
+//         originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
+//         tokenManager.setAccessToken(data.accessToken);
+//         tokenManager.setRefreshToken(data.refreshToken);
+//         return baseApiAxios(originalRequest);
+//       } catch (refreshError) {
+//         console.log(1);
+//         tokenManager.removeTokens();
+//         // window.location.href = '/auth/login';
+//       }
+//     }
 
-      try {
-        const { data } = await baseApiAxios.post(API_ROUTES.AUTH_REFRESH, {
-          refreshToken,
-        });
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-        tokenManager.setAccessToken(data.accessToken);
-        tokenManager.setRefreshToken(data.refreshToken);
-        return baseApiAxios(originalRequest);
-      } catch (refreshError) {
-        tokenManager.removeTokens();
-        window.location.href = '/auth/login';
-      }
-    }
-
-    return Promise.reject(error);
-  },
-);
+//     return Promise.reject(error);
+//   },
+// );

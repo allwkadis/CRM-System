@@ -38,7 +38,7 @@ export interface RegisterUserData {
   username: 'string';
 }
 
-export interface RegisterResponse {
+export interface UserInfo {
   date: string;
   email: string;
   id: number;
@@ -57,3 +57,6 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+
+

@@ -1,22 +1,26 @@
 import { useState } from 'react';
 import { Menu } from 'antd';
-import { Link, NavLink } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
 import { SnippetsOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
 import Sider from 'antd/es/layout/Sider';
 import { ROUTES } from '../../utils/constants/routes';
-import { useAppDispatch } from '../../config/store/store';
-import { Logout } from '../../config/actions/authActions';
+import { userSlice } from '../../store/slices/userSlice';
+import { useAppDispatch } from '../../store/store';
+import { tokenManager } from '../../utils/TokenManager';
+import { authUserLogout } from '../../api/auth';
 
 export const SideBar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const onLogoutHanddler = async () => {
     try {
-      await dispatch(Logout());
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+      await authUserLogout();
+      tokenManager.removeTokens();
+      dispatch(userSlice.actions.logout());
+      navigate('/auth/login');
     } catch {}
   };
 

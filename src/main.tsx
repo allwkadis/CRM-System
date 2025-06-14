@@ -7,14 +7,16 @@ import { ProfilePage } from './pages/ProfilePage/ProfilePage';
 import { ROUTES } from './utils/constants/routes';
 import { TodoPage } from './pages/TodoPage/TodoPage';
 
-import './styles/index.scss';
 import MainLayout from './layouts/MainLayout/MainLayout';
 import { AuthLayout } from './layouts/AuthLayout/AuthLayout';
 import { RegisterForm } from './layouts/AuthLayout/RegisterForm/RegisterForm';
 import { LoginForm } from './layouts/AuthLayout/LoginForm/LoginForm';
 import { NotFoundPage } from './pages/NotFoundPage/NotFoundPage';
 import { Provider } from 'react-redux';
-import { store } from './config/store/store';
+
+import './styles/index.scss';
+import { store } from './store/store';
+import { ProtectedRoute } from './layouts/AuthProtectRoute';
 
 const router = createBrowserRouter([
   {
@@ -35,7 +37,11 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.PROFILE,
-        element: <ProfilePage />,
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
       },
     ],
   },

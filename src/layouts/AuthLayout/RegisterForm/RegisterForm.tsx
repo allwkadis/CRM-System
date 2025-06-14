@@ -10,8 +10,9 @@ import {
   REGISTER_USERNAME_MAX_LENGTH,
   REGISTER_USERNAME_MIN_LENGTH,
 } from '../../../utils/constants/auth';
-import { useAppDispatch, useAppSelector } from '../../../config/store/store';
+
 import { SignUp } from '../../../config/actions/authActions';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 
 export const RegisterForm = () => {
   const [form] = Form.useForm();
@@ -42,15 +43,15 @@ export const RegisterForm = () => {
     const phoneNumber = form.getFieldValue('register-phone-input');
 
     try {
-      await dispatch(
-        SignUp({
-          email: email,
-          login: login,
-          password: password,
-          phoneNumber: phoneNumber,
-          username: username,
-        }),
-      );
+      // await dispatch(
+      //   SignUp({
+      //     email: email,
+      //     login: login,
+      //     password: password,
+      //     phoneNumber: phoneNumber,
+      //     username: username,
+      //   }),
+      // );
       form.resetFields();
       onSuccesRegisterNotification();
       navigate('/auth/login');

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { authUserLogin, authUserLogout, authUserRegister } from '../../api/auth';
-import type { LoginResponse, LoginUserData, RegisterResponse, RegisterUserData } from '../../types/api';
+import type { LoginResponse, LoginUserData, RegisterUserData, UserInfo } from '../../types/api';
 import { tokenManager } from '../../utils/TokenManager';
 
 export const Logout = createAsyncThunk('auth/Logout', async (_, thunkApi) => {
@@ -26,8 +26,7 @@ export const SignIn = createAsyncThunk<
   const { rejectWithValue } = thunkApi;
   try {
     const response = await authUserLogin(userData);
-    if (!response.data) throw new Error('empty Data');
-    console.log(response.data.accessToken);
+    // if (!response.data) throw new Error('empty Data');
     tokenManager.setAccessToken(response.data.accessToken);
     tokenManager.setRefreshToken(response.data.refreshToken);
     return response.data;
@@ -40,7 +39,7 @@ export const SignIn = createAsyncThunk<
 });
 
 export const SignUp = createAsyncThunk<
-  RegisterResponse,
+  UserInfo,
   RegisterUserData,
   {
     rejectValue: string;

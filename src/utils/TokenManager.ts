@@ -1,4 +1,4 @@
-class TokenManager {
+export class TokenManager {
   private _refreshToken: string = '';
   private _accessToken: string = '';
 
@@ -16,7 +16,7 @@ class TokenManager {
   }
 
   getRefreshToken() {
-    return localStorage.getItem('refreshToken') || '';
+    return this._accessToken;
   }
 
   public removeTokens() {
