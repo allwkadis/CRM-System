@@ -28,6 +28,7 @@ export const LoginForm = () => {
     try {
       // await dispatch(SignIn({ login, password })).unwrap();
       const { data } = await authUserLogin({ login, password });
+      console.log(data.accessToken)
       tokenManager.setAccessToken(data.accessToken);
       tokenManager.setRefreshToken(data.refreshToken);
       dispatch(userSlice.actions.login());
