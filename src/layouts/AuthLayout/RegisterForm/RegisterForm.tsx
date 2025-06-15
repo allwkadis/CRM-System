@@ -1,6 +1,6 @@
 import { App, Button, Form, Input } from 'antd';
 
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import {
   REGISTER_LOGIN_MAX_LENGTH,
@@ -13,10 +13,12 @@ import {
 
 import { useAppSelector } from '../../../store/store';
 import { authUserRegister } from '../../../api/auth';
+import { useState } from 'react';
 
 export const RegisterForm = () => {
+  const [isSuccessRegistration, setIsRegistration] = useState(false);
   const [form] = Form.useForm();
-  const navigate = useNavigate();
+  
   const { notification } = App.useApp();
   const { isLoading } = useAppSelector((state) => state.auth);
   const onSuccesRegisterNotification = () => {
@@ -42,15 +44,6 @@ export const RegisterForm = () => {
     const phoneNumber = form.getFieldValue('register-phone-input');
 
     try {
-      // await dispatch(
-      //   SignUp({
-      //     email: email,
-      //     login: login,
-      //     password: password,
-      //     phoneNumber: phoneNumber,
-      //     username: username,
-      //   }),
-      // );
       await authUserRegister({
         email: email,
         login: login,
@@ -60,14 +53,16 @@ export const RegisterForm = () => {
       });
       form.resetFields();
       onSuccesRegisterNotification();
-      navigate('/auth/login');
+      setIsRegistration(true);
     } catch (err) {
       console.log(err);
       onErrorRegisterNotification();
     }
   };
 
-  return (
+  return isSuccessRegistration ? (
+    <Link to={'/auth/login'}>перейти на страницу авторизации для входа в систему</Link>
+  ) : (
     <Form
       name="register-form"
       layout="vertical"

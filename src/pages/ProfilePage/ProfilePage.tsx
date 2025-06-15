@@ -25,33 +25,9 @@ export const ProfilePage = () => {
     } catch {}
   };
 
-  const onSuccesResetPassword = async () => {
-    const password = form.getFieldValue('password');
-    console.log(1);
-    try {
-      await authUserResetPassword({ password });
-      notification.success({
-        message: 'Успешно',
-        description: 'Пароль изменен',
-      });
-    } catch {
-      notification.error({
-        message: 'Ошибка',
-        description: 'При изменении пароль произошла ошибка',
-      });
-    }
-  };
-
   const changePasswordModal = () => {
     const resetPasswordModal = modal.confirm({
       title: 'Изменение пароля',
-      // onOk() {
-      //   onSuccesResetPassword();
-      //   resetPasswordModal.destroy();
-      // },
-      // onCancel() {
-      //   form.resetFields();
-      // },
       closable: true,
       footer: null,
       content: (
@@ -136,7 +112,7 @@ export const ProfilePage = () => {
   return (
     <Flex style={{ height: '100%', width: '100%' }} justify="center" align="center">
       <Card
-        style={{ maxWidth: 800 }}
+        style={{ maxWidth: 800, width: '100%' }}
         actions={[
           <Button type="primary" icon={<LockOutlined />} onClick={changePasswordModal}>
             Изменить пароль
@@ -150,13 +126,14 @@ export const ProfilePage = () => {
           Мой профиль
         </Typography.Title>
         {profileData && (
-          <Descriptions bordered column={1}>
-            <Descriptions.Item label="Имя пользователя">{profileData?.username}</Descriptions.Item>
-            <Descriptions.Item label="Почтовый адрес">{profileData?.email}</Descriptions.Item>
-            {profileData?.phoneNumber && (
-              <Descriptions.Item label="Телефон">{profileData?.phoneNumber}</Descriptions.Item>
-            )}
-          </Descriptions>
+          <Form>
+            <Form.Item label="Имя пользователя">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Почтовый адрес">
+              <Input />
+            </Form.Item>
+          </Form>
         )}
       </Card>
     </Flex>
