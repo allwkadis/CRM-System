@@ -17,6 +17,7 @@ import { Provider } from 'react-redux';
 import './styles/index.scss';
 import { store } from './store/store';
 import { ProtectedRoute } from './layouts/AuthProtectRoute';
+import { UsersPage } from './pages/UsersPage/UsersPage';
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
       {
         path: ROUTES.TODO_PAGE,
         element: <TodoPage />,
+      },
+      {
+        path: '/admin/users',
+        element: (
+          <ProtectedRoute>
+            <UsersPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: ROUTES.PROFILE,
