@@ -15,8 +15,7 @@ export const TodoPage = () => {
 
   const updateData = useCallback(async (status: TodoStatusVariant) => {
     const response = await getAllTodos(status);
-    const data = response.data;
-    setData(data);
+    setData(response.data);
   }, []);
 
   const changeStatusHandler = useCallback((status: TodoStatusVariant) => setActiveStatus(status), []);

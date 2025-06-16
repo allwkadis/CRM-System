@@ -1,24 +1,23 @@
 import { App, Button, Form, Input } from 'antd';
 
-import { Link, useNavigate } from 'react-router';
-
-import {
-  REGISTER_LOGIN_MAX_LENGTH,
-  REGISTER_LOGIN_MIN_LENGTH,
-  REGISTER_PASSWORD_MAX_LENGTH,
-  REGISTER_PASSWORD_MIN_LENGTH,
-  REGISTER_USERNAME_MAX_LENGTH,
-  REGISTER_USERNAME_MIN_LENGTH,
-} from '../../../utils/constants/auth';
+import { Link } from 'react-router';
 
 import { useAppSelector } from '../../../store/store';
 import { authUserRegister } from '../../../api/auth';
 import { useState } from 'react';
+import {
+  LOGIN_MAX_LENGTH,
+  LOGIN_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  USERNAME_MAX_LENGTH,
+  USERNAME_MIN_LENGTH,
+} from '../../../utils/constants/auth';
 
 export const RegisterForm = () => {
   const [isSuccessRegistration, setIsRegistration] = useState(false);
   const [form] = Form.useForm();
-  
+
   const { notification } = App.useApp();
   const { isLoading } = useAppSelector((state) => state.auth);
   const onSuccesRegisterNotification = () => {
@@ -80,12 +79,12 @@ export const RegisterForm = () => {
             message: 'Имя пользователя обязательное поле!',
           },
           {
-            min: REGISTER_USERNAME_MIN_LENGTH,
-            message: `Имя пользователя не может быть меньше ${REGISTER_USERNAME_MIN_LENGTH}`,
+            min: USERNAME_MIN_LENGTH,
+            message: `Имя пользователя не может быть меньше ${USERNAME_MIN_LENGTH}`,
           },
           {
-            max: REGISTER_USERNAME_MAX_LENGTH,
-            message: `Имя пользователя не может быть меньше ${REGISTER_USERNAME_MAX_LENGTH}`,
+            max: USERNAME_MAX_LENGTH,
+            message: `Имя пользователя не может быть меньше ${USERNAME_MAX_LENGTH}`,
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
@@ -108,12 +107,12 @@ export const RegisterForm = () => {
             message: 'Логин обязательное поле!',
           },
           {
-            min: REGISTER_LOGIN_MIN_LENGTH,
-            message: `Логин не может быть меньше ${REGISTER_LOGIN_MIN_LENGTH}`,
+            min: LOGIN_MIN_LENGTH,
+            message: `Логин не может быть меньше ${LOGIN_MIN_LENGTH}`,
           },
           {
-            max: REGISTER_LOGIN_MAX_LENGTH,
-            message: `Логин не может быть больше ${REGISTER_LOGIN_MAX_LENGTH}`,
+            max: LOGIN_MAX_LENGTH,
+            message: `Логин не может быть больше ${LOGIN_MAX_LENGTH}`,
           },
         ]}
       >
@@ -128,12 +127,12 @@ export const RegisterForm = () => {
             message: 'Пароль обязательное поле!',
           },
           {
-            min: REGISTER_PASSWORD_MIN_LENGTH,
-            message: `Пароль не может быть меньше ${REGISTER_PASSWORD_MIN_LENGTH}`,
+            min: PASSWORD_MIN_LENGTH,
+            message: `Пароль не может быть меньше ${PASSWORD_MIN_LENGTH}`,
           },
           {
-            max: REGISTER_PASSWORD_MAX_LENGTH,
-            message: `Пароль не может быть больше ${REGISTER_PASSWORD_MIN_LENGTH}`,
+            max: PASSWORD_MAX_LENGTH,
+            message: `Пароль не может быть больше ${PASSWORD_MAX_LENGTH}`,
           },
         ]}
       >
@@ -172,9 +171,7 @@ export const RegisterForm = () => {
       <Form.Item
         label="Телефон"
         name="register-phone-input"
-        rules={[
-          { pattern: /^\+?[0-9\s\-\(\)]{10,}$/, message: 'Некорректный формат номера! Пример: +7 (123) 456-7890' },
-        ]}
+        rules={[{ pattern: /^\+?[0-9\s\-\(\)]{10,}$/, message: 'Некорректный формат номера! Пример: +7(123)456-7890' }]}
       >
         <Input placeholder="Введите номер телефона" type="tel" />
       </Form.Item>

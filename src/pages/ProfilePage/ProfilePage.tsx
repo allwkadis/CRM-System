@@ -7,7 +7,7 @@ import { authUserLogout, authUserResetPassword } from '../../api/auth';
 import { tokenManager } from '../../utils/TokenManager';
 import { userSlice } from '../../store/slices/userSlice';
 import { useNavigate } from 'react-router';
-import { REGISTER_PASSWORD_MAX_LENGTH, REGISTER_PASSWORD_MIN_LENGTH } from '../../utils/constants/auth';
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '../../utils/constants/auth';
 
 export const ProfilePage = () => {
   const { modal, notification } = App.useApp();
@@ -76,12 +76,12 @@ export const ProfilePage = () => {
                 message: 'Пароль обязательное поле!',
               },
               {
-                min: REGISTER_PASSWORD_MIN_LENGTH,
-                message: `Пароль не может быть меньше ${REGISTER_PASSWORD_MIN_LENGTH}`,
+                min: PASSWORD_MIN_LENGTH,
+                message: `Пароль не может быть меньше ${PASSWORD_MIN_LENGTH}`,
               },
               {
-                max: REGISTER_PASSWORD_MAX_LENGTH,
-                message: `Пароль не может быть больше ${REGISTER_PASSWORD_MIN_LENGTH}`,
+                max: PASSWORD_MAX_LENGTH,
+                message: `Пароль не может быть больше ${PASSWORD_MIN_LENGTH}`,
               },
             ]}
           >

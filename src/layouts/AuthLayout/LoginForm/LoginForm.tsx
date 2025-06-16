@@ -22,13 +22,11 @@ export const LoginForm = () => {
   };
 
   const onSuccessLoginFinish = async () => {
-    const login = form.getFieldValue('login-loginName-input');
-    const password = form.getFieldValue('login-password-input');
+    const login = form.getFieldValue('login');
+    const password = form.getFieldValue('password');
 
     try {
-      // await dispatch(SignIn({ login, password })).unwrap();
       const { data } = await authUserLogin({ login, password });
-      console.log(data.accessToken)
       tokenManager.setAccessToken(data.accessToken);
       tokenManager.setRefreshToken(data.refreshToken);
       dispatch(userSlice.actions.login());
@@ -46,16 +44,12 @@ export const LoginForm = () => {
       style={{ width: '100%', maxWidth: 376, padding: 12 }}
       onFinish={onSuccessLoginFinish}
     >
-      <Form.Item
-        label="Логин"
-        name="login-loginName-input"
-        rules={[{ required: true, message: 'Логин обязательное поле!' }]}
-      >
+      <Form.Item label="Логин" name="login" rules={[{ required: true, message: 'Логин обязательное поле!' }]}>
         <Input placeholder="Введите логин" />
       </Form.Item>
       <Form.Item
         label="Пароль"
-        name="login-password-input"
+        name="password"
         rules={[
           {
             required: true,
@@ -65,12 +59,12 @@ export const LoginForm = () => {
       >
         <Input.Password placeholder="****************" />
       </Form.Item>
-      <Form.Item name="login-submit-btn">
+      <Form.Item name="submit-btn">
         <Button style={{ width: '100%' }} type="primary" htmlType="submit">
           Войти
         </Button>
       </Form.Item>
-      <Form.Item name="login-submit-btn">
+      <Form.Item name="submit-btn">
         <Link to={'/auth/register'}>
           <Button style={{ width: '100%' }} type="link">
             Зарегистрироваться
