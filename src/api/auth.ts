@@ -9,6 +9,6 @@ export const authUserRegister = async (userData: RegisterUserData) =>
 export const authUserLogin = async (userData: LoginUserData) => baseApiAxios.post(API_ROUTES.AUTH_LOGIN, userData);
 
 export const authUserResetPassword = async (password: string) =>
-  baseApiAxios.put(API_ROUTES.AUTH_RESET_PASSWORD, password);
+  baseApiAxios.put(API_ROUTES.AUTH_RESET_PASSWORD, { password });
 
 export const authUserLogout = async () => baseApiAxios.post(API_ROUTES.AUTH_LOGOUT);

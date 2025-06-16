@@ -1,8 +1,8 @@
-import { Typography, Flex, Card, Descriptions, Button, App, Form, Input } from 'antd';
+import { Typography, Flex, Card, Button, App, Form, Input, Descriptions, Space, Avatar } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useEffect } from 'react';
 import { getProfileInfoAction } from '../../store/actions/getProfileData';
-import { LockOutlined, LogoutOutlined } from '@ant-design/icons';
+import { LockOutlined, LogoutOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { authUserLogout, authUserResetPassword } from '../../api/auth';
 import { tokenManager } from '../../utils/TokenManager';
 import { userSlice } from '../../store/slices/userSlice';
@@ -16,13 +16,22 @@ export const ProfilePage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    dispatch(getProfileInfoAction());
+  }, []);
+
   const onLogoutHanddler = async () => {
     try {
       await authUserLogout();
       tokenManager.removeTokens();
       dispatch(userSlice.actions.logout());
       navigate('/auth/login');
-    } catch {}
+    } catch {
+      notification.error({
+        message: 'Ошибка',
+        description: 'Произошла ошибка при выходе из системы',
+      });
+    }
   };
 
   const changePasswordModal = () => {
@@ -43,7 +52,7 @@ export const ProfilePage = () => {
           onFinish={async () => {
             const password = form.getFieldValue('password');
             try {
-              await authUserResetPassword({ password });
+              await authUserResetPassword(password);
               notification.success({
                 message: 'Успешно',
                 description: 'Пароль изменен',
@@ -71,7 +80,7 @@ export const ProfilePage = () => {
                 message: `Пароль не может быть меньше ${REGISTER_PASSWORD_MIN_LENGTH}`,
               },
               {
-                max: REGISTER_PASSWORD_MAX_LENGTH, // поменять название констнт
+                max: REGISTER_PASSWORD_MAX_LENGTH,
                 message: `Пароль не может быть больше ${REGISTER_PASSWORD_MIN_LENGTH}`,
               },
             ]}
@@ -103,16 +112,20 @@ export const ProfilePage = () => {
     });
   };
 
-  useEffect(() => {
-    dispatch(getProfileInfoAction());
-  }, []);
-
   if (isLoading) return <div>loading</div>;
 
   return (
     <Flex style={{ height: '100%', width: '100%' }} justify="center" align="center">
       <Card
         style={{ maxWidth: 800, width: '100%' }}
+        title={
+          <Space>
+            <Avatar size={24} icon={<UserOutlined />} />
+            <Typography.Title level={4} style={{ margin: 0 }}>
+              Профиль
+            </Typography.Title>
+          </Space>
+        }
         actions={[
           <Button type="primary" icon={<LockOutlined />} onClick={changePasswordModal}>
             Изменить пароль
@@ -122,19 +135,37 @@ export const ProfilePage = () => {
           </Button>,
         ]}
       >
-        <Typography.Title level={3} style={{ marginBottom: '24px' }}>
-          Мой профиль
-        </Typography.Title>
-        {profileData && (
-          <Form>
-            <Form.Item label="Имя пользователя">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Почтовый адрес">
-              <Input />
-            </Form.Item>
-          </Form>
-        )}
+        <Descriptions column={1} bordered>
+          <Descriptions.Item
+            label={
+              <span style={{ fontWeight: 'bold' }}>
+                <UserOutlined /> Username
+              </span>
+            }
+          >
+            {profileData?.username}
+          </Descriptions.Item>
+
+          <Descriptions.Item
+            label={
+              <span style={{ fontWeight: 'bold' }}>
+                <MailOutlined /> Email
+              </span>
+            }
+          >
+            {profileData?.email}
+          </Descriptions.Item>
+
+          <Descriptions.Item
+            label={
+              <span style={{ fontWeight: 'bold' }}>
+                <PhoneOutlined /> Phone
+              </span>
+            }
+          >
+            {profileData?.phoneNumber || <Typography style={{ color: '#bfbfbf' }}>Not specified</Typography>}
+          </Descriptions.Item>
+        </Descriptions>
       </Card>
     </Flex>
   );

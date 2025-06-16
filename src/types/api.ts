@@ -58,5 +58,8 @@ export interface LoginResponse {
   refreshToken: string;
 }
 
-
-
+export interface UpdateProfileUserData {
+  email: string;
+  phoneNumber: string;
+  username: string;
+}
