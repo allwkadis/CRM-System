@@ -3,6 +3,7 @@ import type { Todo, TodoStatusVariant } from '../types/api';
 import { API_ROUTES } from '../constants/routes';
 import { baseApiAxios } from './baseApi';
 
+<<<<<<< Updated upstream
 export const getAllTodos = (filter: TodoStatusVariant) => {
   try {
     const response = baseApiAxios.get(API_ROUTES.TODOS, {
@@ -13,6 +14,12 @@ export const getAllTodos = (filter: TodoStatusVariant) => {
     throw err;
   }
 };
+=======
+export const getAllTodos = (filter: TodoStatusVariant) =>
+  baseApiAxios.get(API_ROUTES.TODOS, {
+    params: { filter },
+  });
+>>>>>>> Stashed changes
 
 export const createTodo = async (title: string) => {
   try {
@@ -23,6 +30,7 @@ export const createTodo = async (title: string) => {
   }
 };
 
+<<<<<<< Updated upstream
 export const getTodoById = (id: number) => {
   try {
     const response = baseApiAxios.get<Todo>(`${API_ROUTES.TODOS}/${id}`);
@@ -31,6 +39,9 @@ export const getTodoById = (id: number) => {
     throw err;
   }
 };
+=======
+export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`, {});
+>>>>>>> Stashed changes
 
 export const updateTodo = (id: number, title: string, isDone: boolean) => {
   try {

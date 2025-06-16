@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import { App } from 'antd';
 
-import MainLayout from './layouts/MainLayout';
 import { ProfilePage } from './pages/ProfilePage/ProfilePage';
 import { ROUTES } from './constants/routes';
 import { TodoPage } from './pages/TodoPage/TodoPage';
+import MainLayout from './layouts/MainLayout';
 
 import './styles/index.scss';
 
