@@ -14,7 +14,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const [isChecking, setIsChecking] = useState(true);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuth } = useAppSelector((state) => state.auth);
+  const { isAuth } = useAppSelector((state) => state.user);
   const refreshToken = localStorage.getItem('refreshToken');
 
   useEffect(() => {

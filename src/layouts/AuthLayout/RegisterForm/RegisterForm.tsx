@@ -19,7 +19,7 @@ export const RegisterForm = () => {
   const [form] = Form.useForm();
 
   const { notification } = App.useApp();
-  const { isLoading } = useAppSelector((state) => state.auth);
+  const { isLoading } = useAppSelector((state) => state.user);
   const onSuccesRegisterNotification = () => {
     notification.success({
       message: 'Успешно',

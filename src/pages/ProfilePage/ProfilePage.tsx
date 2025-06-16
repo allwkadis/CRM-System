@@ -1,18 +1,19 @@
-import { Typography, Flex, Card, Button, App, Form, Input, Descriptions, Space, Avatar } from 'antd';
-import { useAppDispatch, useAppSelector } from '../../store/store';
 import { useEffect } from 'react';
-import { getProfileInfoAction } from '../../store/actions/getProfileData';
+import { Typography, Flex, Card, Button, App, Form, Input, Descriptions, Space, Avatar } from 'antd';
 import { LockOutlined, LogoutOutlined, MailOutlined, PhoneOutlined, UserOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router';
+
+import { useAppDispatch, useAppSelector } from '../../store/store';
+import { getProfileInfoAction } from '../../store/actions/getProfileData';
+import { userSlice } from '../../store/slices/userSlice';
 import { authUserLogout, authUserResetPassword } from '../../api/auth';
 import { tokenManager } from '../../utils/TokenManager';
-import { userSlice } from '../../store/slices/userSlice';
-import { useNavigate } from 'react-router';
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from '../../utils/constants/auth';
 
 export const ProfilePage = () => {
   const { modal, notification } = App.useApp();
   const [form] = Form.useForm();
-  const { isLoading, profileData } = useAppSelector((state) => state.auth);
+  const { isLoading, profileData } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -138,9 +139,9 @@ export const ProfilePage = () => {
         <Descriptions column={1} bordered>
           <Descriptions.Item
             label={
-              <span style={{ fontWeight: 'bold' }}>
+              <Typography>
                 <UserOutlined /> Username
-              </span>
+              </Typography>
             }
           >
             {profileData?.username}
@@ -148,9 +149,9 @@ export const ProfilePage = () => {
 
           <Descriptions.Item
             label={
-              <span style={{ fontWeight: 'bold' }}>
+              <Typography>
                 <MailOutlined /> Email
-              </span>
+              </Typography>
             }
           >
             {profileData?.email}
@@ -158,12 +159,12 @@ export const ProfilePage = () => {
 
           <Descriptions.Item
             label={
-              <span style={{ fontWeight: 'bold' }}>
+              <Typography>
                 <PhoneOutlined /> Phone
-              </span>
+              </Typography>
             }
           >
-            {profileData?.phoneNumber || <Typography style={{ color: '#bfbfbf' }}>Not specified</Typography>}
+            {profileData?.phoneNumber || <Typography style={{ color: '#bfbfbf' }}>Не указан</Typography>}
           </Descriptions.Item>
         </Descriptions>
       </Card>
