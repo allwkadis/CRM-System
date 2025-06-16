@@ -5,6 +5,8 @@ export const getAdminAllUsers = async (params) => {
     const response = await baseApiAxios.get('/admin/users', {
       params: {
         search: params.search,
+        sortBy: params.sortBy,
+        sortOrder: params.sortOrder,
       },
     });
     return response;

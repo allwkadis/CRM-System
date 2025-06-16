@@ -17,6 +17,7 @@ export const SideBar = () => {
       title: 'Профиль',
     },
     { key: 'todo', label: <NavLink to={ROUTES.TODO_PAGE}>Todo</NavLink>, icon: <SnippetsOutlined />, title: 'Todo' },
+    { key: 'admin', label: <NavLink to={'/admin/users'}>Users</NavLink>, icon: <SnippetsOutlined />, title: 'Users' },
   ];
 
   const isCollapsedToggle = () => setIsCollapsed((prev) => !prev);
