@@ -1,6 +1,7 @@
-import styles from './TodoList.module.scss';
-import { TodoItem } from '../TodoItem/TodoItem';
 import type { Todo } from '../../types/api';
+
+import { TodoItem } from '../TodoItem/TodoItem';
+import { List } from 'antd';
 
 interface TodoListProps {
   updateData: () => void;
@@ -9,10 +10,15 @@ interface TodoListProps {
 
 export const TodoList = ({ updateData, todos }: TodoListProps) => {
   return (
-    <ul className={styles.TodoList}>
-      {todos?.map((todo) => (
-        <TodoItem id={todo.id} text={todo.title} completed={todo.isDone} updateData={updateData} key={todo.id} />
-      ))}
-    </ul>
+    <List
+      dataSource={todos}
+      renderItem={(todo) => {
+        return (
+          <List.Item>
+            <TodoItem id={todo.id} text={todo.title} completed={todo.isDone} updateData={updateData} key={todo.id} />
+          </List.Item>
+        );
+      }}
+    />
   );
 };

@@ -1,27 +1,62 @@
-import type { MetaResponse, Todo } from '../types/api';
-import type { TodoStatusVariant } from '../types/api';
+import type { Todo, TodoStatusVariant } from '../types/api';
 
-import { baseApi } from './baseApi';
-import { ROUTES } from '../constants/routes';
+import { API_ROUTES } from '../constants/routes';
+import { baseApiAxios } from './baseApi';
 
+<<<<<<< Updated upstream
+export const getAllTodos = (filter: TodoStatusVariant) => {
+  try {
+    const response = baseApiAxios.get(API_ROUTES.TODOS, {
+      params: { filter },
+    });
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
+=======
 export const getAllTodos = (filter: TodoStatusVariant) =>
-  baseApi<MetaResponse<Todo>>(`${ROUTES.TODOS}?filter=${filter}`);
-
-export const getTodoById = (id: number) => baseApi<Todo>(`${ROUTES.TODOS}/${id}`);
-
-export const createTodo = (title: string) =>
-  baseApi<Todo>(ROUTES.TODOS, {
-    method: 'POST',
-    body: JSON.stringify({ title, isDone: false }),
+  baseApiAxios.get(API_ROUTES.TODOS, {
+    params: { filter },
   });
+>>>>>>> Stashed changes
 
-export const updateTodo = (id: number, title: string, isDone: boolean) =>
-  baseApi<Todo>(`${ROUTES.TODOS}/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify({ title: title, isDone: isDone }),
-  });
+export const createTodo = async (title: string) => {
+  try {
+    const response = await baseApiAxios.post<Todo>(API_ROUTES.TODOS, { title, isDone: false });
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
 
-export const deleteTodo = (id: number) =>
-  baseApi<string>(`${ROUTES.TODOS}/${id}`, {
-    method: 'DELETE',
-  });
+<<<<<<< Updated upstream
+export const getTodoById = (id: number) => {
+  try {
+    const response = baseApiAxios.get<Todo>(`${API_ROUTES.TODOS}/${id}`);
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
+=======
+export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`, {});
+>>>>>>> Stashed changes
+
+export const updateTodo = (id: number, title: string, isDone: boolean) => {
+  try {
+    const response = baseApiAxios.put<Todo>(`${API_ROUTES.TODOS}/${id}`, { title, isDone });
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const deleteTodo = (id: number) => {
+  try {
+    const response = baseApiAxios.delete(`${API_ROUTES.TODOS}/${id}`);
+    return response;
+  } catch (err) {
+    throw err;
+  }
+};

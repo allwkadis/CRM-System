@@ -1,18 +1,9 @@
 @import url('./variables/global.scss');
 @import url('./reset.scss');
+@import url('antd/dist/reset.css');
 
-body {
-  min-width: 100vh;
-  min-height: 100vh;
-  color: var(--font-color);
-}
-
-.wrapper {
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.ant-form-item {
+  margin-right: 0 !important;
 }
 
 .todo_wrapper {

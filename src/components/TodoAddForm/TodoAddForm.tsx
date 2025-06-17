@@ -1,18 +1,49 @@
 import { useState } from 'react';
 
-import { ERROR } from '../../constants/error';
+import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
 import { createTodo } from '../../api/todos';
-import { validate } from '../../utils/validate';
-import styles from './TodoAddForm.module.scss';
-import { Button } from '../Button/Button';
+
+import { Flex, Form, Input, Button, App } from 'antd';
+import { FileAddFilled } from '@ant-design/icons';
 
 interface TodoAddFormProps {
   updateData: () => void;
 }
 
+//trest321
+
+
+const addTodoInputRules = [
+  { required: true, message: 'Обязательное поле!' },
+  {
+    min: TODO_TITLE_MIN_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MIN_LENGTH}`,
+  },
+  {
+    max: TODO_TITLE_MAX_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MAX_LENGTH}`,
+  },
+];
+
 export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
-  const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState<ERROR | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [form] = Form.useForm();
+
+  const { notification } = App.useApp();
+
+  const onSuccessAddTodo = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Задача успешно добавлена',
+    });
+  };
+
+  const onErrorAddTodoMessage = () => {
+    notification.error({
+      message: 'Ошибка',
+      description: 'При добавлении задачи произошла ошибка',
+    });
+  };
 
   const editSubmitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,24 +51,17 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
     if (!validateData) {
       setError(undefined);
       await createTodo(inputValue);
-      await setInputValue('');
       await updateData();
     }
+
     setInputValue('');
     setError(validateData);
   };
 
-  const changeInputValueHandler = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
-
   return (
     <div className={styles.TodoAddForm_wrapper}>
       <form onSubmit={editSubmitHandler} className={styles.TodoAddForm}>
-        <input
-          placeholder="Task be done..."
-          onChange={changeInputValueHandler}
-          value={inputValue}
-          className={styles.CreateInput}
-        />
+        <input placeholder="Task be done..." onChange={changeInputValueHandler} className={styles.CreateInput} />
         <Button variant="primary">📝 Add</Button>
       </form>
       {error && <div className={styles.Error}>{error}</div>}

@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import styles from './TodoItem.module.scss';
-import type { ERROR } from '../../constants/error';
+import { memo, useState } from 'react';
+
+import { Button, Typography, Flex, Input, Space, Checkbox, Form, App } from 'antd';
+import { DeleteFilled, EditFilled } from '@ant-design/icons';
+import { useForm } from 'antd/es/form/Form';
+
+import { TODO_TITLE_MAX_LENGTH, TODO_TITLE_MIN_LENGTH } from '../../constants/todo';
 import { deleteTodo, updateTodo } from '../../api/todos';
-import { validate } from '../../utils/validate';
+
+import styles from './TodoItem.module.scss';
 
 interface TodoItemProps {
   text: string;
@@ -11,16 +16,59 @@ interface TodoItemProps {
   updateData: () => void;
 }
 
-export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(text);
-  const [error, setError] = useState<ERROR | undefined>(undefined);
+const EditTextRules = [
+  {
+    min: TODO_TITLE_MIN_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MIN_LENGTH}`,
+  },
+  {
+    max: TODO_TITLE_MAX_LENGTH,
+    message: `Текст задачи не может быть меньше ${TODO_TITLE_MAX_LENGTH}`,
+  },
+];
 
-  const isEditingToggle = () => setIsEditing((prev) => !prev);
+export const TodoItem = memo(({ text, completed, id, updateData }: TodoItemProps) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [form] = useForm();
 
-  const deleteTodoHandler = async () => {
-    await deleteTodo(id);
-    await updateData();
+  const { notification } = App.useApp();
+
+  const startEditingHandler = () => setIsEditing(true);
+
+  const closeEditingHandler = () => setIsEditing(false);
+
+  const cancelIsEditingHandler = () => {
+    form.setFieldValue('editInput', text);
+    closeEditingHandler();
+  };
+
+  const onErrorMessage = () => {
+    notification.error({
+      message: 'Ошибка',
+      description: 'Произошла ошибка',
+    });
+  };
+
+  const onErrorAddTodoMessage = () => {
+    notification.error({
+      message: 'Ошибка',
+      description: 'Произошла ошибка при редактировании задачи',
+    });
+  };
+
+  const onSuccessEditMessage = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Задача успешно изменена',
+    });
+  };
+
+  const onSuccessDeleteTodo = () => {
+    notification.success({
+      message: 'Успешно',
+      description: 'Задача успешно удалена',
+    });
   };
 
   const cancelIsEditingHandler = () => {
@@ -29,22 +77,41 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
   };
 
   const changeIsDoneHandler = async () => {
-    await updateTodo(id, editText, !completed);
-    await updateData();
+    await updateTodo(id, text, !completed);
+    try {
+    } catch (err) {
+      onErrorMessage();
+    } finally {
+      updateData();
+    }
   };
 
-  const editSubmitHandler = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const validateData = validate(editText);
-
-    if (!validateData) {
-      await updateTodo(id, editText, completed);
-      await updateData();
-      await isEditingToggle();
+  const deleteTodoHandler = async () => {
+    try {
+      setIsLoading(true);
+      await deleteTodo(id);
+      onSuccessDeleteTodo();
+    } catch (err) {
+      onErrorMessage();
+    } finally {
+      setIsLoading(false);
+      updateData();
     }
+  };
 
-    setError(validateData);
+  const editSubmitHandler = async () => {
+    try {
+      setIsLoading(true);
+      const editInputValue = form.getFieldValue('editInput');
+      await updateTodo(id, editInputValue, completed);
+      onSuccessEditMessage();
+      setIsEditing(false);
+    } catch (error) {
+      onErrorMessage();
+    } finally {
+      setIsLoading(false);
+      updateData();
+    }
   };
 
   return (
@@ -88,7 +155,7 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
               Сохранить
             </button>
             <button
-              onClick={cancelIsEditingHandler}
+              onClick={() => console.log(1)}
               className={`${styles.actionButton} ${styles.editButton}`}
               disabled={completed}
             >
@@ -102,19 +169,20 @@ export const TodoItem = ({ text, completed, id, updateData }: TodoItemProps) => 
             aria-label="Edit task"
             disabled={completed}
           >
-            ✏️
-          </button>
-        )}
-        <div className={styles.todoActions}>
-          <button
-            onClick={deleteTodoHandler}
-            className={`${styles.actionButton} ${styles.deleteButton}`}
-            aria-label="Delete task"
-          >
-            🗑️
-          </button>
-        </div>
-      </div>
-    </div>
+            {text}
+          </Typography.Text>
+          <Space>
+            <Button
+              onClick={startEditingHandler}
+              disabled={completed}
+              type="primary"
+              size="small"
+              icon={<EditFilled />}
+            />
+            <Button onClick={deleteTodoHandler} color="danger" variant="solid" size="small" icon={<DeleteFilled />} />
+          </Space>
+        </>
+      )}
+    </Flex>
   );
-};
+});

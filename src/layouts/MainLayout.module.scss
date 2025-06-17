@@ -1,0 +1,11 @@
+.Wrapper {
+  min-height: 100vh;
+
+  .Content {
+    max-width: 1240px;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+  }
+}
