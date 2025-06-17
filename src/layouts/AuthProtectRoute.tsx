@@ -25,7 +25,8 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
       }
 
       try {
-        console.log(refreshToken);
+        console.log(1);
+        // console.log(refreshToken);
         const response = await baseApiAxios.post('/auth/refresh', {
           refreshToken,
         });
@@ -33,6 +34,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         tokenManager.setRefreshToken(response.data.refreshToken);
         dispatch(userSlice.actions.login());
       } catch (error) {
+        console.log(1);
         dispatch(userSlice.actions.logout());
         tokenManager.removeTokens();
         navigate('/auth/login');
