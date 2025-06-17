@@ -71,6 +71,11 @@ export const TodoItem = memo(({ text, completed, id, updateData }: TodoItemProps
     });
   };
 
+  const cancelIsEditingHandler = () => {
+    setIsEditing(false);
+    setEditText(text);
+  };
+
   const changeIsDoneHandler = async () => {
     await updateTodo(id, text, !completed);
     try {
@@ -110,57 +115,59 @@ export const TodoItem = memo(({ text, completed, id, updateData }: TodoItemProps
   };
 
   return (
-    <Flex align="start" gap="middle" className={styles.todoItem}>
-      <Checkbox checked={completed} onChange={changeIsDoneHandler} disabled={isEditing} />
-      {isEditing ? (
-        <>
-          <Form
-            layout="inline"
-            name="editForm"
-            form={form}
-            onFinish={editSubmitHandler}
-            onFinishFailed={onErrorAddTodoMessage}
-            style={{ width: '100%' }}
-          >
-            <Flex gap={'middle'} style={{ width: '100%' }}>
-              <Form.Item style={{ flex: 1 }} name="editInput" rules={EditTextRules}>
-                <Input autoFocus defaultValue={text} />
-              </Form.Item>
-              <Space size={'middle'}>
-                <Form.Item name="editSaveButton">
-                  <Button
-                    disabled={completed}
-                    size="small"
-                    variant="solid"
-                    color="green"
-                    htmlType="submit"
-                    loading={isLoading}
-                  >
-                    Сохранить
-                  </Button>
-                </Form.Item>
-                <Form.Item name="editCancelButton">
-                  <Button
-                    disabled={completed}
-                    size="small"
-                    color="danger"
-                    variant="solid"
-                    onClick={cancelIsEditingHandler}
-                  >
-                    Отменить
-                  </Button>
-                </Form.Item>
-              </Space>
-            </Flex>
-          </Form>
-        </>
-      ) : (
-        <>
-          <Typography.Text
-            delete={completed}
-            style={{
-              flex: 1,
-            }}
+    <div className={`${styles.todoItem} ${completed ? styles.completed : ''}`}>
+      <div className={styles.todoContent}>
+        <input
+          type="checkbox"
+          checked={completed}
+          onChange={changeIsDoneHandler}
+          className={styles.todoCheckbox}
+          aria-label="Toggle task"
+          disabled={isEditing}
+        />
+
+        {isEditing ? (
+          <form onSubmit={editSubmitHandler} className={styles.editForm}>
+            <label>
+              <input
+                type="text"
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                className={styles.editInput}
+                autoFocus
+              />
+              <div className={styles.Error}>{error}</div>
+            </label>
+          </form>
+        ) : (
+          <span className={styles.todoText}>{text}</span>
+        )}
+      </div>
+
+      <div className={styles.todoActions}>
+        {isEditing ? (
+          <>
+            <button
+              className={`${styles.actionButton} ${styles.editButton}`}
+              disabled={completed}
+              onClick={editSubmitHandler}
+            >
+              Сохранить
+            </button>
+            <button
+              onClick={() => console.log(1)}
+              className={`${styles.actionButton} ${styles.editButton}`}
+              disabled={completed}
+            >
+              Отменить
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={isEditingToggle}
+            className={`${styles.actionButton} ${styles.editButton}`}
+            aria-label="Edit task"
+            disabled={completed}
           >
             {text}
           </Typography.Text>

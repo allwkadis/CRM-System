@@ -45,39 +45,26 @@ export const TodoAddForm = ({ updateData }: TodoAddFormProps) => {
     });
   };
 
-  const onAddTaskFinishHandler = async () => {
-    try {
-      const text = form.getFieldValue('inputField');
-      setIsLoading(true);
-      await createTodo(text);
-      onSuccessAddTodo();
-    } catch (err) {
-      onErrorAddTodoMessage();
-    } finally {
-      form.resetFields();
-      setIsLoading(false);
-      updateData();
+  const editSubmitHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const validateData = validate(inputValue);
+    if (!validateData) {
+      setError(undefined);
+      await createTodo(inputValue);
+      await updateData();
     }
+
+    setInputValue('');
+    setError(validateData);
   };
 
   return (
-    <Form
-      layout="inline"
-      onFinish={onAddTaskFinishHandler}
-      onFinishFailed={onErrorAddTodoMessage}
-      form={form}
-      style={{ padding: 12 }}
-    >
-      <Flex gap="middle" style={{ width: '100%' }}>
-        <Form.Item name="inputField" style={{ flex: 1 }} rules={addTodoInputRules}>
-          <Input placeholder="Task be done..." />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isLoading} icon={<FileAddFilled />}>
-            Add
-          </Button>
-        </Form.Item>
-      </Flex>
-    </Form>
+    <div className={styles.TodoAddForm_wrapper}>
+      <form onSubmit={editSubmitHandler} className={styles.TodoAddForm}>
+        <input placeholder="Task be done..." onChange={changeInputValueHandler} className={styles.CreateInput} />
+        <Button variant="primary">📝 Add</Button>
+      </form>
+      {error && <div className={styles.Error}>{error}</div>}
+    </div>
   );
 };
