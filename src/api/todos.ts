@@ -3,16 +3,10 @@ import type { Todo, TodoStatusVariant } from '../types/api';
 import { baseApiAxios } from './baseApi';
 import { API_ROUTES } from '../utils/constants/routes';
 
-export const getAllTodos = (filter: TodoStatusVariant) => {
-  try {
-    const response = baseApiAxios.get(API_ROUTES.TODOS, {
-      params: { filter },
-    });
-    return response;
-  } catch (err) {
-    throw err;
-  }
-};
+export const getAllTodos = (filter: TodoStatusVariant) =>
+  baseApiAxios.get('todos', {
+    params: { filter },
+  });
 
 export const createTodo = async (title: string) => {
   try {
@@ -23,14 +17,7 @@ export const createTodo = async (title: string) => {
   }
 };
 
-export const getTodoById = (id: number) => {
-  try {
-    const response = baseApiAxios.get<Todo>(`${API_ROUTES.TODOS}/${id}`);
-    return response;
-  } catch (err) {
-    throw err;
-  }
-};
+export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`);
 
 export const updateTodo = (id: number, title: string, isDone: boolean) => {
   try {

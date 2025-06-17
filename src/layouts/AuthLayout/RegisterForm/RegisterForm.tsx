@@ -54,7 +54,6 @@ export const RegisterForm = () => {
       onSuccesRegisterNotification();
       setIsRegistration(true);
     } catch (err) {
-      console.log(err);
       onErrorRegisterNotification();
     }
   };
@@ -178,6 +177,11 @@ export const RegisterForm = () => {
       <Form.Item name="login-submit-btn">
         <Button style={{ width: '100%' }} type="primary" htmlType="submit" loading={isLoading}>
           Зарегистрироваться
+        </Button>
+      </Form.Item>
+      <Form.Item>
+        <Button style={{ width: '100%' }} type="link" loading={isLoading}>
+          <Link to={'/auth/login'}>Уже есть аккаунт?</Link>
         </Button>
       </Form.Item>
     </Form>

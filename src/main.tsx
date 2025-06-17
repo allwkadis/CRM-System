@@ -33,7 +33,11 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTES.TODO_PAGE,
-        element: <TodoPage />,
+        element: (
+          <ProtectedRoute>
+            <TodoPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: ROUTES.PROFILE,

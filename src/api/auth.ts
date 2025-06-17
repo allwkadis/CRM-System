@@ -5,7 +5,8 @@ import { baseApiAxios } from './baseApi';
 
 export const authUserRegister = async (userData: RegisterUserData) => {
   try {
-    baseApiAxios.post(API_ROUTES.AUTH_REGISTER, userData);
+    const response = baseApiAxios.post(API_ROUTES.AUTH_REGISTER, userData);
+    return response;
   } catch (err) {
     throw err;
   }
