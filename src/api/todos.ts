@@ -4,7 +4,7 @@ import { baseApiAxios } from './baseApi';
 import { API_ROUTES } from '../utils/constants/routes';
 
 export const getAllTodos = (filter: TodoStatusVariant) =>
-  baseApiAxios.get('todos', {
+  baseApiAxios.get(API_ROUTES.TODOS, {
     params: { filter },
   });
 
@@ -17,7 +17,7 @@ export const createTodo = async (title: string) => {
   }
 };
 
-export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`);
+export const getTodoById = (id: number) => baseApiAxios.get(`${API_ROUTES.TODOS}/${id}`, {});
 
 export const updateTodo = (id: number, title: string, isDone: boolean) => {
   try {
