@@ -85,14 +85,14 @@ export const RegisterForm = () => {
             max: USERNAME_MAX_LENGTH,
             message: `Имя пользователя не может быть меньше ${USERNAME_MAX_LENGTH}`,
           },
-          ({ getFieldValue }) => ({
-            validator(_, value) {
-              if (!value || getFieldValue('register-login-input') !== value) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('Имя пользователя и логин должны быть разными'));
-            },
-          }),
+          // ({ getFieldValue }) => ({
+          //   validator(_, value) {
+          //     if (!value || getFieldValue('register-login-input') !== value) {
+          //       return Promise.resolve();
+          //     }
+          //     return Promise.reject(new Error('Имя пользователя и логин должны быть разными'));
+          //   },
+          // }),
         ]}
       >
         <Input placeholder="Введите имя пользователя" />
